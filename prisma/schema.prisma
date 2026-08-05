@@ -1,0 +1,155 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  /// Matches Supabase Auth `sub` (UUID); set explicitly on upsert — do not rely on client-generated IDs.
+  id        String   @id
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  searches  Search[]
+
+  @@map("users")
+}
+
+model Search {
+  id           String           @id @default(uuid())
+  userId       String           @map("user_id")
+  category     String
+  city         String?
+  neighborhood String?
+  postalCode   String?          @map("postal_code")
+  latitude     Float?
+  longitude    Float?
+  radius       Float?
+  status       JobStatus        @default(PENDING)
+  totalFound   Int              @default(0) @map("total_found")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businesses   BusinessSearch[]
+
+  @@index([userId])
+  @@map("searches")
+}
+
+model Business {
+  id                  String            @id @default(uuid())
+  googlePlaceId       String            @unique @map("google_place_id")
+  name                String
+  formattedAddress    String            @map("formatted_address")
+  websiteUri          String?           @map("website_uri")
+  nationalPhoneNumber String?           @map("national_phone_number")
+  rating              Float?
+  userRatingCount     Int?              @map("user_rating_count")
+  currentOpeningHours Json?             @map("current_opening_hours")
+  businessStatus      String?           @map("business_status")
+  latitude            Float
+  longitude           Float
+  googleMapsUri       String?           @map("google_maps_uri")
+  primaryType         String?           @map("primary_type")
+  types               String[]
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updatedAt           DateTime          @updatedAt @map("updated_at")
+
+  analyses            BusinessAnalysis[]
+  searches            BusinessSearch[]
+  digitalPresence     DigitalPresence?
+
+  @@index([latitude, longitude])
+  @@index([primaryType])
+  @@map("businesses")
+}
+
+model BusinessSearch {
+  searchId   String   @map("search_id")
+  businessId String   @map("business_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  search     Search   @relation(fields: [searchId], references: [id], onDelete: Cascade)
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@id([searchId, businessId])
+  @@map("business_searches")
+}
+
+model DigitalPresence {
+  id                 String    @id @default(uuid())
+  businessId         String    @unique @map("business_id")
+  emails             String[]  @default([])
+  facebookUrl        String?   @map("facebook_url")
+  instagramUrl       String?   @map("instagram_url")
+  linkedinUrl        String?   @map("linkedin_url")
+  tiktokUrl          String?   @map("tiktok_url")
+  sslValid           Boolean   @default(false) @map("ssl_valid")
+  sslIssuer          String?   @map("ssl_issuer")
+  loadTimeMs         Int?      @map("load_time_ms")
+  domainExpiry       DateTime? @map("domain_expiry")
+  technologies       String[]  @default([])
+  hasGoogleAnalytics Boolean   @default(false) @map("has_google_analytics")
+  hasMetaPixel       Boolean   @default(false) @map("has_meta_pixel")
+  gbpPhotoCount      Int       @default(0) @map("gbp_photo_count")
+  isClaimed          Boolean   @default(true) @map("is_claimed")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  business           Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("digital_presences")
+}
+
+model BusinessAnalysis {
+  id              String   @id @default(uuid())
+  businessId      String   @map("business_id")
+  leadScore       Int      @map("lead_score")
+  priority        Priority @default(LOW)
+  scoringRules    Json     @map("scoring_rules")
+  aiNeeds         Json     @map("ai_needs")
+  summary         String   @db.Text
+  opportunities   String[] @map("opportunities")
+  salesProposal   String   @db.Text @map("sales_proposal")
+  coldEmail       String   @db.Text @map("cold_email")
+  whatsappMessage String   @db.Text @map("whatsapp_message")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  business        Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId])
+  @@index([priority])
+  @@map("business_analyses")
+}
+
+model SystemSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("system_settings")
+}
