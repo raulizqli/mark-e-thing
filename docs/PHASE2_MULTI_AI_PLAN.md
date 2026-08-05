@@ -124,13 +124,12 @@ Un **Director de Marketing Digital** multiagente que analiza rendimiento (o señ
 ### Entregables de esta iteración
 
 - [x] Documento de plan (este archivo)
-- [ ] AiGateway multi-proveedor
-- [ ] Schema Prisma Fase 2
-- [ ] Agentes + Orchestrator
-- [ ] API `POST /companies/:id/agent/run`, listado de runs/recommendations
-- [ ] UI básica “Agente IA”
-- [ ] Tests del orquestador y gateway
-
+- [x] AiGateway multi-proveedor
+- [x] Schema Prisma Fase 2
+- [x] Agentes + Orchestrator
+- [x] API `POST /companies/:id/agent/run`, listado de runs/recommendations
+- [x] UI básica “Agente IA”
+- [x] Tests del orquestador y gateway
 ### Fase 2+ (posterior)
 
 - Ingesta real de métricas (Graph API insights)
