@@ -35,6 +35,19 @@ Todas las respuestas exitosas: `{ "success": true, "data": ... }`
 | POST | `/companies/:id/publish` |
 | GET | `/companies/:id/publish/jobs` |
 
-## Tipos de contenido
+## Fase 2 — Agente de Marketing
 
-`FACEBOOK_POST`, `INSTAGRAM_POST`, `INSTAGRAM_CAROUSEL`, `INSTAGRAM_STORY`, `FACEBOOK_STORY`, `WHATSAPP_STATUS`, `LINKEDIN`, `X`, `BLOG`, `EMAIL`, `PROMOTION`
+| Método | Ruta |
+|---|---|
+| POST | `/companies/:id/agent/run` body `{ goal? }` |
+| GET | `/companies/:id/agent/runs` |
+| GET | `/companies/:id/agent/runs/:runId` |
+| GET | `/companies/:id/recommendations` |
+| PATCH | `/companies/:id/recommendations/:id` body `{ status }` |
+| GET/PUT | `/companies/:id/ai-settings` |
+
+UI: `/companies/:id/agent`
+
+Orquestador: Analytics → Trend → Brand → Campaign → Planner → Content → SEO → Social → Image.
+
+Multi-IA: ver `docs/PHASE2_MULTI_AI_PLAN.md`. Variables `AI_*_PROVIDER`, `AI_FALLBACK_PROVIDER`, `ANTHROPIC_API_KEY`, `GOOGLE_AI_API_KEY`.

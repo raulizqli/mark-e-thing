@@ -2,6 +2,8 @@
 
 import { Module } from '@nestjs/common';
 import {
+  AGENT_RUN_REPOSITORY,
+  AI_SETTINGS_REPOSITORY,
   CALENDAR_REPOSITORY,
   COMPANY_REPOSITORY,
   CONTENT_GENERATOR,
@@ -9,8 +11,11 @@ import {
   IMAGE_GENERATOR,
   IMAGE_REPOSITORY,
   KNOWLEDGE_REPOSITORY,
+  MARKETING_ORCHESTRATOR,
+  METRICS_REPOSITORY,
   PUBLISH_ADAPTER_REGISTRY,
   PUBLISH_REPOSITORY,
+  RECOMMENDATION_REPOSITORY,
   STORAGE_SERVICE,
 } from '@domain/repositories/tokens';
 import { InfrastructureModule } from '@infrastructure/infrastructure.module';
@@ -38,6 +43,13 @@ import { ListKnowledgeUseCase } from './use-cases/knowledge/list-knowledge.use-c
 import { UploadKnowledgeUseCase } from './use-cases/knowledge/upload-knowledge.use-case';
 import { EnqueuePublishUseCase } from './use-cases/publishing/enqueue-publish.use-case';
 import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs.use-case';
+import { RunMarketingAgentUseCase } from './use-cases/agents/run-marketing-agent.use-case';
+import { ListAgentRunsUseCase } from './use-cases/agents/list-agent-runs.use-case';
+import { GetAgentRunUseCase } from './use-cases/agents/get-agent-run.use-case';
+import { ListRecommendationsUseCase } from './use-cases/agents/list-recommendations.use-case';
+import { UpdateRecommendationStatusUseCase } from './use-cases/agents/update-recommendation-status.use-case';
+import { GetAiSettingsUseCase } from './use-cases/agents/get-ai-settings.use-case';
+import { UpsertAiSettingsUseCase } from './use-cases/agents/upsert-ai-settings.use-case';
 
 @Module({
   imports: [InfrastructureModule],
@@ -202,6 +214,72 @@ import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs
         new ListPublishJobsUseCase(companies, publish),
       inject: [COMPANY_REPOSITORY, PUBLISH_REPOSITORY],
     },
+    {
+      provide: RunMarketingAgentUseCase,
+      useFactory: (
+        companies,
+        knowledge,
+        contents,
+        metrics,
+        agentRuns,
+        recommendations,
+        orchestrator,
+      ) =>
+        new RunMarketingAgentUseCase(
+          companies,
+          knowledge,
+          contents,
+          metrics,
+          agentRuns,
+          recommendations,
+          orchestrator,
+        ),
+      inject: [
+        COMPANY_REPOSITORY,
+        KNOWLEDGE_REPOSITORY,
+        CONTENT_REPOSITORY,
+        METRICS_REPOSITORY,
+        AGENT_RUN_REPOSITORY,
+        RECOMMENDATION_REPOSITORY,
+        MARKETING_ORCHESTRATOR,
+      ],
+    },
+    {
+      provide: ListAgentRunsUseCase,
+      useFactory: (companies, agentRuns) =>
+        new ListAgentRunsUseCase(companies, agentRuns),
+      inject: [COMPANY_REPOSITORY, AGENT_RUN_REPOSITORY],
+    },
+    {
+      provide: GetAgentRunUseCase,
+      useFactory: (companies, agentRuns, recommendations) =>
+        new GetAgentRunUseCase(companies, agentRuns, recommendations),
+      inject: [COMPANY_REPOSITORY, AGENT_RUN_REPOSITORY, RECOMMENDATION_REPOSITORY],
+    },
+    {
+      provide: ListRecommendationsUseCase,
+      useFactory: (companies, recommendations) =>
+        new ListRecommendationsUseCase(companies, recommendations),
+      inject: [COMPANY_REPOSITORY, RECOMMENDATION_REPOSITORY],
+    },
+    {
+      provide: UpdateRecommendationStatusUseCase,
+      useFactory: (companies, recommendations) =>
+        new UpdateRecommendationStatusUseCase(companies, recommendations),
+      inject: [COMPANY_REPOSITORY, RECOMMENDATION_REPOSITORY],
+    },
+    {
+      provide: GetAiSettingsUseCase,
+      useFactory: (companies, aiSettings) =>
+        new GetAiSettingsUseCase(companies, aiSettings),
+      inject: [COMPANY_REPOSITORY, AI_SETTINGS_REPOSITORY],
+    },
+    {
+      provide: UpsertAiSettingsUseCase,
+      useFactory: (companies, aiSettings) =>
+        new UpsertAiSettingsUseCase(companies, aiSettings),
+      inject: [COMPANY_REPOSITORY, AI_SETTINGS_REPOSITORY],
+    },
   ],
   exports: [
     ListCompaniesUseCase,
@@ -228,6 +306,13 @@ import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs
     DuplicateCalendarEntryUseCase,
     EnqueuePublishUseCase,
     ListPublishJobsUseCase,
+    RunMarketingAgentUseCase,
+    ListAgentRunsUseCase,
+    GetAgentRunUseCase,
+    ListRecommendationsUseCase,
+    UpdateRecommendationStatusUseCase,
+    GetAiSettingsUseCase,
+    UpsertAiSettingsUseCase,
   ],
 })
 export class ApplicationModule {}

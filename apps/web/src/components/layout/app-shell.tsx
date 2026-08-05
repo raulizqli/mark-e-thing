@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Bot,
   Building2,
   Calendar,
   History,
@@ -33,6 +34,7 @@ function companyNav(companyId: string) {
     { href: `/companies/${companyId}/calendar`, label: "Calendario", icon: Calendar },
     { href: `/companies/${companyId}/knowledge`, label: "Conocimiento", icon: Building2 },
     { href: `/companies/${companyId}/content`, label: "Historial", icon: History },
+    { href: `/companies/${companyId}/agent`, label: "Agente IA", icon: Bot },
   ];
 }
 

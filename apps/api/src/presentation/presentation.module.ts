@@ -2,6 +2,7 @@
 
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ApplicationModule } from '@application/application.module';
+import { AgentsController } from './controllers/agents.controller';
 import { CalendarController } from './controllers/calendar.controller';
 import { CompaniesController } from './controllers/companies.controller';
 import { ContentController } from './controllers/content.controller';
@@ -22,6 +23,7 @@ import { DevUserBootstrapService } from './services/dev-user-bootstrap.service';
     ImagesController,
     CalendarController,
     PublishingController,
+    AgentsController,
   ],
   providers: [DevUserBootstrapService, DevUserMiddleware],
 })

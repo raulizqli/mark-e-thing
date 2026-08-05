@@ -106,6 +106,10 @@ model Company {
   calendarEntries      CalendarEntry[]
   socialConnections    SocialConnection[]
   publishJobs          PublishJob[]
+  aiSettings           CompanyAiSettings?
+  metricsSnapshots     MetricsSnapshot[]
+  agentRuns            AgentRun[]
+  recommendations      Recommendation[]
 
   @@index([userId])
   @@map("companies")
@@ -256,4 +260,144 @@ model PublishJob {
   @@index([companyId, status])
   @@index([contentId])
   @@map("publish_jobs")
+}
+
+enum AgentType {
+  ORCHESTRATOR
+  BRAND
+  CONTENT
+  IMAGE
+  SEO
+  SOCIAL
+  ANALYTICS
+  CAMPAIGN
+  TREND
+  PLANNER
+}
+
+enum AgentRunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum RecommendationType {
+  PUBLISH
+  SCHEDULE
+  RECYCLE
+  CREATE_CONTENT
+  PAUSE_CAMPAIGN
+  REPEAT_CAMPAIGN
+  CREATE_PROMOTION
+  TARGET_AUDIENCE
+  AD_BUDGET
+  FUNNEL
+  MONTHLY_PLAN
+  OTHER
+}
+
+enum RecommendationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXECUTED
+}
+
+model CompanyAiSettings {
+  id                String   @id @default(uuid())
+  companyId         String   @unique @map("company_id")
+  contentProvider   String?  @map("content_provider")
+  contentModel      String?  @map("content_model")
+  imageProvider     String?  @map("image_provider")
+  imageModel        String?  @map("image_model")
+  reasoningProvider String?  @map("reasoning_provider")
+  reasoningModel    String?  @map("reasoning_model")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  company           Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("company_ai_settings")
+}
+
+model MetricsSnapshot {
+  id           String   @id @default(uuid())
+  companyId    String   @map("company_id")
+  platform     String?
+  periodStart  DateTime @map("period_start")
+  periodEnd    DateTime @map("period_end")
+  reach        Int      @default(0)
+  likes        Int      @default(0)
+  comments     Int      @default(0)
+  shares       Int      @default(0)
+  conversions  Int      @default(0)
+  bestHours    Json?    @map("best_hours")
+  raw          Json?
+  source       String   @default("mock")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, periodEnd])
+  @@map("metrics_snapshots")
+}
+
+model AgentRun {
+  id              String             @id @default(uuid())
+  companyId       String             @map("company_id")
+  status          AgentRunStatus
+  goal            String?
+  summary         String?            @db.Text
+  plan            Json?
+  error           String?
+  startedAt       DateTime?          @map("started_at")
+  finishedAt      DateTime?          @map("finished_at")
+  createdAt       DateTime           @default(now()) @map("created_at")
+
+  steps           AgentStep[]
+  recommendations Recommendation[]
+  company         Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, createdAt])
+  @@map("agent_runs")
+}
+
+model AgentStep {
+  id        String         @id @default(uuid())
+  runId     String         @map("run_id")
+  agent     AgentType
+  status    AgentRunStatus
+  input     Json?
+  output    Json?
+  provider  String?
+  model     String?
+  latencyMs Int?           @map("latency_ms")
+  error     String?
+  createdAt DateTime       @default(now()) @map("created_at")
+
+  run       AgentRun       @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@map("agent_steps")
+}
+
+model Recommendation {
+  id          String               @id @default(uuid())
+  companyId   String               @map("company_id")
+  runId       String?              @map("run_id")
+  type        RecommendationType
+  title       String
+  description String               @db.Text
+  priority    Int                  @default(0)
+  payload     Json?
+  status      RecommendationStatus @default(PENDING)
+  createdAt   DateTime             @default(now()) @map("created_at")
+  updatedAt   DateTime             @updatedAt @map("updated_at")
+
+  company     Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  run         AgentRun?            @relation(fields: [runId], references: [id], onDelete: SetNull)
+
+  @@index([companyId, status])
+  @@map("recommendations")
 }

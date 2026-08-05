@@ -76,6 +76,18 @@ Cada red social tiene un adaptador (`FacebookAdapter`, `InstagramAdapter`, …) 
 
 WhatsApp Status: la API oficial de WhatsApp Business Platform no cubre Estados de la misma forma que posts; la publicación automática se evalúa aparte.
 
-## Fase 2 (próxima)
+## Multi-IA + Fase 2
 
-Sistema multiagente (Brand, Content, Image, SEO, Social, Analytics, Campaign, Trend, Planner) orquestado por un Director de Marketing Digital que decide qué publicar, cuándo, qué reciclar y qué presupuestos sugerir.
+Ver plan completo: [`docs/PHASE2_MULTI_AI_PLAN.md`](docs/PHASE2_MULTI_AI_PLAN.md).
+
+### Multi-proveedor
+
+`AiGateway` enruta por capacidad (`content`, `image`, `reasoning`) a OpenAI, Anthropic, Gemini o Mock, con fallback (`AI_FALLBACK_PROVIDER`). Preferencias por empresa en `/companies/:id/agent`.
+
+### Agente de Marketing
+
+Orquestador que ejecuta: Analytics → Trend → Brand → Campaign → Planner → Content → SEO → Social → Image.
+
+- UI: `/companies/:id/agent`
+- API: `POST /companies/:id/agent/run`
+- Persiste `AgentRun`, `AgentStep`, `Recommendation`, `MetricsSnapshot` (mock hasta conectar insights reales)

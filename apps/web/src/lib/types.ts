@@ -186,3 +186,80 @@ export interface ApiError {
   message: string;
   statusCode?: number;
 }
+
+export type AgentRunStatus = "PENDING" | "RUNNING" | "COMPLETED" | "FAILED";
+
+export type RecommendationType =
+  | "PUBLISH"
+  | "SCHEDULE"
+  | "RECYCLE"
+  | "CREATE_CONTENT"
+  | "PAUSE_CAMPAIGN"
+  | "REPEAT_CAMPAIGN"
+  | "CREATE_PROMOTION"
+  | "TARGET_AUDIENCE"
+  | "AD_BUDGET"
+  | "FUNNEL"
+  | "MONTHLY_PLAN"
+  | "OTHER";
+
+export type RecommendationStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "REJECTED"
+  | "EXECUTED";
+
+export interface AgentStep {
+  id: string;
+  runId: string;
+  agent: string;
+  status: AgentRunStatus;
+  output?: Record<string, unknown> | null;
+  provider?: string | null;
+  model?: string | null;
+  latencyMs?: number | null;
+  error?: string | null;
+  createdAt: string;
+}
+
+export interface Recommendation {
+  id: string;
+  companyId: string;
+  runId?: string | null;
+  type: RecommendationType;
+  title: string;
+  description: string;
+  priority: number;
+  payload?: Record<string, unknown> | null;
+  status: RecommendationStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AgentRun {
+  id: string;
+  companyId: string;
+  status: AgentRunStatus;
+  goal?: string | null;
+  summary?: string | null;
+  plan?: Record<string, unknown> | null;
+  error?: string | null;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  createdAt: string;
+  steps?: AgentStep[];
+  recommendations?: Recommendation[];
+}
+
+export interface CompanyAiSettings {
+  id: string;
+  companyId: string;
+  contentProvider?: string | null;
+  contentModel?: string | null;
+  imageProvider?: string | null;
+  imageModel?: string | null;
+  reasoningProvider?: string | null;
+  reasoningModel?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
