@@ -1,23 +1,23 @@
 // apps/api/src/infrastructure/prisma/publish.prisma-repository.ts
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type {
   CreatePublishJobData,
   PublishJob,
   SocialConnection,
   UpdatePublishJobData,
-} from '@domain/entities/publish.entity.js';
+} from '@domain/entities/publish.entity';
 import type {
   PublishJobListFilters,
   PublishRepository,
-} from '@domain/repositories/publish.repository.js';
-import type { PublishPlatform } from '@domain/types/enums.js';
+} from '@domain/repositories/publish.repository';
+import type { PublishPlatform } from '@domain/types/enums';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from './prisma.service.js';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class PublishPrismaRepository implements PublishRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async createJob(data: CreatePublishJobData): Promise<PublishJob> {
     const row = await this.prisma.publishJob.create({

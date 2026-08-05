@@ -1,23 +1,23 @@
 // apps/api/src/infrastructure/prisma/content.prisma-repository.ts
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type {
   Content,
   ContentVersion,
   CreateContentData,
   CreateContentVersionData,
   UpdateContentData,
-} from '@domain/entities/content.entity.js';
+} from '@domain/entities/content.entity';
 import type {
   ContentListFilters,
   ContentRepository,
-} from '@domain/repositories/content.repository.js';
+} from '@domain/repositories/content.repository';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from './prisma.service.js';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class ContentPrismaRepository implements ContentRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async create(data: CreateContentData): Promise<Content> {
     const row = await this.prisma.content.create({

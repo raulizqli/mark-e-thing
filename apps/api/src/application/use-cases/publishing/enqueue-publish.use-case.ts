@@ -1,12 +1,12 @@
 // apps/api/src/application/use-cases/publishing/enqueue-publish.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { PublishRepository } from '../../../domain/repositories/publish.repository.js';
-import type { PublishAdapterRegistry } from '../../../domain/services/publish-adapter.port.js';
-import type { PublishJob } from '../../../domain/entities/publish.entity.js';
-import type { PublishPlatform } from '../../../domain/types/enums.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { PublishRepository } from '../../../domain/repositories/publish.repository';
+import type { PublishAdapterRegistry } from '../../../domain/services/publish-adapter.port';
+import type { PublishJob } from '../../../domain/entities/publish.entity';
+import type { PublishPlatform } from '../../../domain/types/enums';
+import { AppError } from '../../../shared/errors/app-error';
 
 export interface EnqueuePublishInput {
   companyId: string;

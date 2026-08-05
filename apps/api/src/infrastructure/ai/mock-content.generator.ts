@@ -6,7 +6,7 @@ import type {
   ContentGeneratorPort,
   GeneratedContentResult,
   GenerateContentParams,
-} from '@domain/services/content-generator.port.js';
+} from '@domain/services/content-generator.port';
 
 @Injectable()
 export class MockContentGenerator implements ContentGeneratorPort {

@@ -8,6 +8,26 @@ export interface CalendarEntry {
   notes: string | null;
   createdAt: Date;
   updatedAt: Date;
+  content?: {
+    id: string;
+    companyId: string;
+    type: string;
+    status: string;
+    title: string;
+    copy: string;
+    cta: string | null;
+    emojis: string[];
+    hashtags: string[];
+    imagePrompt: string | null;
+    seoKeywords: string[];
+    currentVersion: number;
+    scheduledAt: Date | null;
+    publishedAt: Date | null;
+    imageId: string | null;
+    metadata: Record<string, unknown> | null;
+    createdAt: Date;
+    updatedAt: Date;
+  };
 }
 
 export type CreateCalendarEntryData = Pick<

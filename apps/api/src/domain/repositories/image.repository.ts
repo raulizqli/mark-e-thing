@@ -3,7 +3,7 @@
 import type {
   CreateGeneratedImageData,
   GeneratedImage,
-} from '../entities/generated-image.entity.js';
+} from '../entities/generated-image.entity';
 
 export interface ImageRepository {
   create(data: CreateGeneratedImageData): Promise<GeneratedImage>;

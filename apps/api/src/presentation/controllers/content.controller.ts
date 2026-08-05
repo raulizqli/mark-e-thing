@@ -1,6 +1,7 @@
 // apps/api/src/presentation/controllers/content.controller.ts
 
 import {
+  Inject,
   Body,
   Controller,
   Get,
@@ -10,33 +11,33 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
-import { DuplicateContentUseCase } from '@application/use-cases/content/duplicate-content.use-case.js';
-import { GenerateContentUseCase } from '@application/use-cases/content/generate-content.use-case.js';
-import { GetContentUseCase } from '@application/use-cases/content/get-content.use-case.js';
-import { ListContentUseCase } from '@application/use-cases/content/list-content.use-case.js';
-import { ListContentVersionsUseCase } from '@application/use-cases/content/list-content-versions.use-case.js';
-import { RegenerateContentUseCase } from '@application/use-cases/content/regenerate-content.use-case.js';
-import { RestoreContentVersionUseCase } from '@application/use-cases/content/restore-content-version.use-case.js';
-import { UpdateContentUseCase } from '@application/use-cases/content/update-content.use-case.js';
+import { DuplicateContentUseCase } from '@application/use-cases/content/duplicate-content.use-case';
+import { GenerateContentUseCase } from '@application/use-cases/content/generate-content.use-case';
+import { GetContentUseCase } from '@application/use-cases/content/get-content.use-case';
+import { ListContentUseCase } from '@application/use-cases/content/list-content.use-case';
+import { ListContentVersionsUseCase } from '@application/use-cases/content/list-content-versions.use-case';
+import { RegenerateContentUseCase } from '@application/use-cases/content/regenerate-content.use-case';
+import { RestoreContentVersionUseCase } from '@application/use-cases/content/restore-content-version.use-case';
+import { UpdateContentUseCase } from '@application/use-cases/content/update-content.use-case';
 import type {
   DuplicateContentInput,
   RegenerateContentInput,
   UpdateContentInput,
-} from '@application/dto/content.dto.js';
-import type { ContentStatus, ContentType } from '@domain/types/enums.js';
-import type { RequestWithUser } from '../middleware/dev-user.middleware.js';
+} from '@application/dto/content.dto';
+import type { ContentStatus, ContentType } from '@domain/types/enums';
+import type { RequestWithUser } from '../middleware/dev-user.middleware';
 
 @Controller('companies/:companyId/content')
 export class ContentController {
   constructor(
-    private readonly generateContent: GenerateContentUseCase,
-    private readonly listContent: ListContentUseCase,
-    private readonly getContent: GetContentUseCase,
-    private readonly updateContent: UpdateContentUseCase,
-    private readonly duplicateContent: DuplicateContentUseCase,
-    private readonly regenerateContent: RegenerateContentUseCase,
-    private readonly listVersions: ListContentVersionsUseCase,
-    private readonly restoreVersion: RestoreContentVersionUseCase,
+    @Inject(GenerateContentUseCase) private readonly generateContent: GenerateContentUseCase,
+    @Inject(ListContentUseCase) private readonly listContent: ListContentUseCase,
+    @Inject(GetContentUseCase) private readonly getContent: GetContentUseCase,
+    @Inject(UpdateContentUseCase) private readonly updateContent: UpdateContentUseCase,
+    @Inject(DuplicateContentUseCase) private readonly duplicateContent: DuplicateContentUseCase,
+    @Inject(RegenerateContentUseCase) private readonly regenerateContent: RegenerateContentUseCase,
+    @Inject(ListContentVersionsUseCase) private readonly listVersions: ListContentVersionsUseCase,
+    @Inject(RestoreContentVersionUseCase) private readonly restoreVersion: RestoreContentVersionUseCase,
   ) {}
 
   @Post('generate')

@@ -1,6 +1,6 @@
 // apps/api/src/domain/entities/knowledge-document.entity.ts
 
-import type { KnowledgeType } from '../types/enums.js';
+import type { KnowledgeType } from '../types/enums';
 
 export interface KnowledgeDocument {
   id: string;

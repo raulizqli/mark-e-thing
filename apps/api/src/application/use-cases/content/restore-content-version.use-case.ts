@@ -1,10 +1,10 @@
 // apps/api/src/application/use-cases/content/restore-content-version.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { Content } from '../../../domain/entities/content.entity.js';
-import type { RestoreContentVersionInput } from '../../dto/content.dto.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { Content } from '../../../domain/entities/content.entity';
+import type { RestoreContentVersionInput } from '../../dto/content.dto';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class RestoreContentVersionUseCase {
   constructor(

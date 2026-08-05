@@ -2,16 +2,19 @@
 
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import type { NextFunction, Request, Response } from 'express';
-import { DevUserBootstrapService, type DevUser } from '../services/dev-user-bootstrap.service.js';
+import { env } from '../../config/env';
+import type { DevUser } from '../services/dev-user-bootstrap.service';
 
 export type RequestWithUser = Request & { user?: DevUser };
 
 @Injectable()
 export class DevUserMiddleware implements NestMiddleware {
-  constructor(private readonly bootstrap: DevUserBootstrapService) {}
-
   use(req: RequestWithUser, _res: Response, next: NextFunction): void {
-    req.user = this.bootstrap.getUser();
+    req.user = {
+      id: env.DEV_USER_ID,
+      email: env.DEV_USER_EMAIL,
+      name: env.DEV_USER_NAME,
+    };
     next();
   }
 }

@@ -3,9 +3,9 @@
 import 'reflect-metadata';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { env } from './config/env.js';
-import { AppModule } from './app.module.js';
-import { AppErrorFilter } from '@presentation/filters/app-error.filter.js';
+import { env } from './config/env';
+import { AppModule } from './app.module';
+import { AppErrorFilter } from '@presentation/filters/app-error.filter';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);

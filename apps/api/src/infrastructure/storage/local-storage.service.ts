@@ -3,7 +3,7 @@
 import { Injectable } from '@nestjs/common';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import type { StoragePort, StoredObject } from '@domain/services/storage.port.js';
+import type { StoragePort, StoredObject } from '@domain/services/storage.port';
 
 const UPLOAD_ROOT = '/workspace/.tmp/uploads';
 

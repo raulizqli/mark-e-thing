@@ -1,155 +1,259 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+// prisma/schema.prisma
+// MarkeThing — Phase 1 domain model
 
 generator client {
   provider = "prisma-client-js"
 }
 
-enum Role {
-  USER
-  ADMIN
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-enum Priority {
-  LOW
-  MEDIUM
-  HIGH
+enum ContentType {
+  FACEBOOK_POST
+  INSTAGRAM_POST
+  INSTAGRAM_CAROUSEL
+  INSTAGRAM_STORY
+  FACEBOOK_STORY
+  WHATSAPP_STATUS
+  LINKEDIN
+  X
+  BLOG
+  EMAIL
+  PROMOTION
 }
 
-enum JobStatus {
-  PENDING
-  PROCESSING
-  COMPLETED
+enum ContentStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
   FAILED
+  ARCHIVED
+}
+
+enum KnowledgeType {
+  PDF
+  WORD
+  IMAGE
+  CATALOG
+  MANUAL
+  FAQ
+  SUCCESS_CASE
+  OTHER
+}
+
+enum PublishPlatform {
+  FACEBOOK
+  INSTAGRAM
+  WHATSAPP
+  LINKEDIN
+  X
+}
+
+enum PublishJobStatus {
+  PENDING
+  QUEUED
+  PUBLISHING
+  SUCCEEDED
+  FAILED
+  CANCELLED
 }
 
 model User {
-  /// Matches Supabase Auth `sub` (UUID); set explicitly on upsert — do not rely on client-generated IDs.
-  id        String   @id
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   name      String?
-  role      Role     @default(USER)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  searches  Search[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  companies Company[]
 
   @@map("users")
 }
 
-model Search {
-  id           String           @id @default(uuid())
-  userId       String           @map("user_id")
-  category     String
-  city         String?
-  neighborhood String?
-  postalCode   String?          @map("postal_code")
-  latitude     Float?
-  longitude    Float?
-  radius       Float?
-  status       JobStatus        @default(PENDING)
-  totalFound   Int              @default(0) @map("total_found")
-  createdAt    DateTime         @default(now()) @map("created_at")
-  updatedAt    DateTime         @updatedAt @map("updated_at")
-  
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  businesses   BusinessSearch[]
+model Company {
+  id                   String              @id @default(uuid())
+  userId               String              @map("user_id")
+  name                 String
+  description          String?
+  industry             String?             @map("giro")
+  services             String[]            @default([])
+  products             String[]            @default([])
+  promotions           String[]            @default([])
+  city                 String?
+  website              String?
+  socialFacebook       String?             @map("social_facebook")
+  socialInstagram      String?             @map("social_instagram")
+  socialLinkedin       String?             @map("social_linkedin")
+  socialX              String?             @map("social_x")
+  socialWhatsapp       String?             @map("social_whatsapp")
+  primaryColor         String?             @map("primary_color")
+  secondaryColor       String?             @map("secondary_color")
+  accentColor          String?             @map("accent_color")
+  logoUrl              String?             @map("logo_url")
+  typography           String?
+  targetAudience       String?             @map("target_audience")
+  toneOfVoice          String?             @map("tone_of_voice")
+  forbiddenWords       String[]            @default([]) @map("forbidden_words")
+  preferredCtas        String[]            @default([]) @map("preferred_ctas")
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+
+  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  knowledgeDocuments   KnowledgeDocument[]
+  contents             Content[]
+  generatedImages      GeneratedImage[]
+  calendarEntries      CalendarEntry[]
+  socialConnections    SocialConnection[]
+  publishJobs          PublishJob[]
 
   @@index([userId])
-  @@map("searches")
+  @@map("companies")
 }
 
-model Business {
-  id                  String            @id @default(uuid())
-  googlePlaceId       String            @unique @map("google_place_id")
-  name                String
-  formattedAddress    String            @map("formatted_address")
-  websiteUri          String?           @map("website_uri")
-  nationalPhoneNumber String?           @map("national_phone_number")
-  rating              Float?
-  userRatingCount     Int?              @map("user_rating_count")
-  currentOpeningHours Json?             @map("current_opening_hours")
-  businessStatus      String?           @map("business_status")
-  latitude            Float
-  longitude           Float
-  googleMapsUri       String?           @map("google_maps_uri")
-  primaryType         String?           @map("primary_type")
-  types               String[]
-  createdAt           DateTime          @default(now()) @map("created_at")
-  updatedAt           DateTime          @updatedAt @map("updated_at")
+model KnowledgeDocument {
+  id           String        @id @default(uuid())
+  companyId    String        @map("company_id")
+  title        String
+  type         KnowledgeType @default(OTHER)
+  fileName     String        @map("file_name")
+  mimeType     String        @map("mime_type")
+  storageKey   String        @map("storage_key")
+  storageUrl   String?       @map("storage_url")
+  extractedText String?      @map("extracted_text") @db.Text
+  metadata     Json?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
 
-  analyses            BusinessAnalysis[]
-  searches            BusinessSearch[]
-  digitalPresence     DigitalPresence?
+  company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  @@index([latitude, longitude])
-  @@index([primaryType])
-  @@map("businesses")
+  @@index([companyId])
+  @@map("knowledge_documents")
 }
 
-model BusinessSearch {
-  searchId   String   @map("search_id")
-  businessId String   @map("business_id")
-  createdAt  DateTime @default(now()) @map("created_at")
+model Content {
+  id              String           @id @default(uuid())
+  companyId       String           @map("company_id")
+  type            ContentType
+  status          ContentStatus    @default(DRAFT)
+  title           String
+  copy            String           @db.Text
+  cta             String?
+  emojis          String[]         @default([])
+  hashtags        String[]         @default([])
+  imagePrompt     String?          @map("image_prompt") @db.Text
+  seoKeywords     String[]         @default([]) @map("seo_keywords")
+  currentVersion  Int              @default(1) @map("current_version")
+  scheduledAt     DateTime?        @map("scheduled_at")
+  publishedAt     DateTime?        @map("published_at")
+  imageId         String?          @map("image_id")
+  metadata        Json?
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
 
-  search     Search   @relation(fields: [searchId], references: [id], onDelete: Cascade)
-  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  company         Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  image           GeneratedImage?  @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  versions        ContentVersion[]
+  calendarEntries CalendarEntry[]
+  publishJobs     PublishJob[]
 
-  @@id([searchId, businessId])
-  @@map("business_searches")
+  @@index([companyId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@map("contents")
 }
 
-model DigitalPresence {
-  id                 String    @id @default(uuid())
-  businessId         String    @unique @map("business_id")
-  emails             String[]  @default([])
-  facebookUrl        String?   @map("facebook_url")
-  instagramUrl       String?   @map("instagram_url")
-  linkedinUrl        String?   @map("linkedin_url")
-  tiktokUrl          String?   @map("tiktok_url")
-  sslValid           Boolean   @default(false) @map("ssl_valid")
-  sslIssuer          String?   @map("ssl_issuer")
-  loadTimeMs         Int?      @map("load_time_ms")
-  domainExpiry       DateTime? @map("domain_expiry")
-  technologies       String[]  @default([])
-  hasGoogleAnalytics Boolean   @default(false) @map("has_google_analytics")
-  hasMetaPixel       Boolean   @default(false) @map("has_meta_pixel")
-  gbpPhotoCount      Int       @default(0) @map("gbp_photo_count")
-  isClaimed          Boolean   @default(true) @map("is_claimed")
-  createdAt          DateTime  @default(now()) @map("created_at")
-  updatedAt          DateTime  @updatedAt @map("updated_at")
+model ContentVersion {
+  id          String   @id @default(uuid())
+  contentId   String   @map("content_id")
+  version     Int
+  title       String
+  copy        String   @db.Text
+  cta         String?
+  emojis      String[] @default([])
+  hashtags    String[] @default([])
+  imagePrompt String?  @map("image_prompt") @db.Text
+  seoKeywords String[] @default([]) @map("seo_keywords")
+  snapshot    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
 
-  business           Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  content     Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
 
-  @@map("digital_presences")
+  @@unique([contentId, version])
+  @@index([contentId])
+  @@map("content_versions")
 }
 
-model BusinessAnalysis {
-  id              String   @id @default(uuid())
-  businessId      String   @map("business_id")
-  leadScore       Int      @map("lead_score")
-  priority        Priority @default(LOW)
-  scoringRules    Json     @map("scoring_rules")
-  aiNeeds         Json     @map("ai_needs")
-  summary         String   @db.Text
-  opportunities   String[] @map("opportunities")
-  salesProposal   String   @db.Text @map("sales_proposal")
-  coldEmail       String   @db.Text @map("cold_email")
-  whatsappMessage String   @db.Text @map("whatsapp_message")
-  createdAt       DateTime @default(now()) @map("created_at")
+model GeneratedImage {
+  id        String    @id @default(uuid())
+  companyId String    @map("company_id")
+  prompt    String    @db.Text
+  storageKey String?  @map("storage_key")
+  url       String?
+  model     String
+  createdAt DateTime  @default(now()) @map("created_at")
 
-  business        Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  company   Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contents  Content[]
 
-  @@index([businessId])
-  @@index([priority])
-  @@map("business_analyses")
+  @@index([companyId])
+  @@map("generated_images")
 }
 
-model SystemSetting {
-  key       String   @id
-  value     Json
-  updatedAt DateTime @updatedAt @map("updated_at")
+model CalendarEntry {
+  id          String   @id @default(uuid())
+  companyId   String   @map("company_id")
+  contentId   String   @map("content_id")
+  scheduledAt DateTime @map("scheduled_at")
+  notes       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
-  @@map("system_settings")
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  content     Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, scheduledAt])
+  @@index([contentId])
+  @@map("calendar_entries")
+}
+
+model SocialConnection {
+  id           String          @id @default(uuid())
+  companyId    String          @map("company_id")
+  platform     PublishPlatform
+  externalId   String?         @map("external_id")
+  displayName  String?         @map("display_name")
+  accessToken  String?         @map("access_token") @db.Text
+  refreshToken String?         @map("refresh_token") @db.Text
+  metadata     Json?
+  connectedAt  DateTime?       @map("connected_at")
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+
+  company      Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, platform])
+  @@map("social_connections")
+}
+
+model PublishJob {
+  id          String           @id @default(uuid())
+  companyId   String           @map("company_id")
+  contentId   String           @map("content_id")
+  platform    PublishPlatform
+  status      PublishJobStatus @default(PENDING)
+  scheduledAt DateTime?        @map("scheduled_at")
+  publishedAt DateTime?        @map("published_at")
+  externalId  String?          @map("external_id")
+  error       String?
+  payload     Json?
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  company     Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  content     Content          @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, status])
+  @@index([contentId])
+  @@map("publish_jobs")
 }

@@ -1,11 +1,11 @@
 // apps/api/src/application/use-cases/calendar/schedule-content.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { CalendarRepository } from '../../../domain/repositories/calendar.repository.js';
-import type { CalendarEntry } from '../../../domain/entities/calendar-entry.entity.js';
-import type { ScheduleContentInput } from '../../dto/calendar.dto.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { CalendarRepository } from '../../../domain/repositories/calendar.repository';
+import type { CalendarEntry } from '../../../domain/entities/calendar-entry.entity';
+import type { ScheduleContentInput } from '../../dto/calendar.dto';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class ScheduleContentUseCase {
   constructor(

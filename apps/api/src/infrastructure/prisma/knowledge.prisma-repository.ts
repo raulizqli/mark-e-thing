@@ -1,17 +1,17 @@
 // apps/api/src/infrastructure/prisma/knowledge.prisma-repository.ts
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type {
   CreateKnowledgeDocumentData,
   KnowledgeDocument,
-} from '@domain/entities/knowledge-document.entity.js';
-import type { KnowledgeRepository } from '@domain/repositories/knowledge.repository.js';
+} from '@domain/entities/knowledge-document.entity';
+import type { KnowledgeRepository } from '@domain/repositories/knowledge.repository';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from './prisma.service.js';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class KnowledgePrismaRepository implements KnowledgeRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async create(data: CreateKnowledgeDocumentData): Promise<KnowledgeDocument> {
     const row = await this.prisma.knowledgeDocument.create({

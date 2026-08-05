@@ -1,9 +1,9 @@
 // apps/api/src/application/use-cases/companies/update-company.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { Company } from '../../../domain/entities/company.entity.js';
-import type { UpdateCompanyInput } from '../../dto/company.dto.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { Company } from '../../../domain/entities/company.entity';
+import type { UpdateCompanyInput } from '../../dto/company.dto';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class UpdateCompanyUseCase {
   constructor(private readonly companyRepository: CompanyRepository) {}

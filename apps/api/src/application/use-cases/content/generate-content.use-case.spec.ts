@@ -1,15 +1,15 @@
 // apps/api/src/application/use-cases/content/generate-content.use-case.spec.ts
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GenerateContentUseCase } from './generate-content.use-case.js';
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { ContentGeneratorPort } from '../../../domain/services/content-generator.port.js';
-import type { Company } from '../../../domain/entities/company.entity.js';
-import type { KnowledgeDocument } from '../../../domain/entities/knowledge-document.entity.js';
-import type { Content } from '../../../domain/entities/content.entity.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import { GenerateContentUseCase } from './generate-content.use-case';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { ContentGeneratorPort } from '../../../domain/services/content-generator.port';
+import type { Company } from '../../../domain/entities/company.entity';
+import type { KnowledgeDocument } from '../../../domain/entities/knowledge-document.entity';
+import type { Content } from '../../../domain/entities/content.entity';
+import { AppError } from '../../../shared/errors/app-error';
 
 const userId = 'user-1';
 const companyId = 'company-1';

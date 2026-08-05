@@ -4,7 +4,7 @@ import type {
   CalendarEntry,
   CreateCalendarEntryData,
   UpdateCalendarEntryData,
-} from '../entities/calendar-entry.entity.js';
+} from '../entities/calendar-entry.entity';
 
 export interface CalendarRepository {
   create(data: CreateCalendarEntryData): Promise<CalendarEntry>;

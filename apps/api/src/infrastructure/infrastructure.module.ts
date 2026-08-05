@@ -12,22 +12,17 @@ import {
   PUBLISH_ADAPTER_REGISTRY,
   PUBLISH_REPOSITORY,
   STORAGE_SERVICE,
-} from '@domain/repositories/tokens.js';
-import { createContentGenerator, createImageGenerator } from './ai/ai.factory.js';
-import { CalendarPrismaRepository } from './prisma/calendar.prisma-repository.js';
-import { CompanyPrismaRepository } from './prisma/company.prisma-repository.js';
-import { ContentPrismaRepository } from './prisma/content.prisma-repository.js';
-import { ImagePrismaRepository } from './prisma/image.prisma-repository.js';
-import { KnowledgePrismaRepository } from './prisma/knowledge.prisma-repository.js';
-import { PrismaService } from './prisma/prisma.service.js';
-import { PublishPrismaRepository } from './prisma/publish.prisma-repository.js';
-import { FacebookAdapter } from './publishing/adapters/facebook.adapter.js';
-import { InstagramAdapter } from './publishing/adapters/instagram.adapter.js';
-import { LinkedinAdapter } from './publishing/adapters/linkedin.adapter.js';
-import { WhatsappAdapter } from './publishing/adapters/whatsapp.adapter.js';
-import { XAdapter } from './publishing/adapters/x.adapter.js';
-import { PublishAdapterRegistryService } from './publishing/publish-adapter.registry.js';
-import { LocalStorageService } from './storage/local-storage.service.js';
+} from '@domain/repositories/tokens';
+import { createContentGenerator, createImageGenerator } from './ai/ai.factory';
+import { CalendarPrismaRepository } from './prisma/calendar.prisma-repository';
+import { CompanyPrismaRepository } from './prisma/company.prisma-repository';
+import { ContentPrismaRepository } from './prisma/content.prisma-repository';
+import { ImagePrismaRepository } from './prisma/image.prisma-repository';
+import { KnowledgePrismaRepository } from './prisma/knowledge.prisma-repository';
+import { PrismaService } from './prisma/prisma.service';
+import { PublishPrismaRepository } from './prisma/publish.prisma-repository';
+import { PublishAdapterRegistryService } from './publishing/publish-adapter.registry';
+import { LocalStorageService } from './storage/local-storage.service';
 
 @Global()
 @Module({
@@ -42,11 +37,6 @@ import { LocalStorageService } from './storage/local-storage.service.js';
     { provide: STORAGE_SERVICE, useClass: LocalStorageService },
     { provide: CONTENT_GENERATOR, useFactory: createContentGenerator },
     { provide: IMAGE_GENERATOR, useFactory: createImageGenerator },
-    FacebookAdapter,
-    InstagramAdapter,
-    WhatsappAdapter,
-    LinkedinAdapter,
-    XAdapter,
     { provide: PUBLISH_ADAPTER_REGISTRY, useClass: PublishAdapterRegistryService },
   ],
   exports: [

@@ -1,7 +1,7 @@
 // apps/api/src/domain/services/content-generator.port.ts
 
-import type { Company } from '../entities/company.entity.js';
-import type { ContentType } from '../types/enums.js';
+import type { Company } from '../entities/company.entity';
+import type { ContentType } from '../types/enums';
 
 export interface GeneratedContentResult {
   title: string;

@@ -1,6 +1,7 @@
 // apps/api/src/presentation/controllers/companies.controller.ts
 
 import {
+  Inject,
   Body,
   Controller,
   Delete,
@@ -10,22 +11,22 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { CreateCompanyUseCase } from '@application/use-cases/companies/create-company.use-case.js';
-import { DeleteCompanyUseCase } from '@application/use-cases/companies/delete-company.use-case.js';
-import { GetCompanyUseCase } from '@application/use-cases/companies/get-company.use-case.js';
-import { ListCompaniesUseCase } from '@application/use-cases/companies/list-companies.use-case.js';
-import { UpdateCompanyUseCase } from '@application/use-cases/companies/update-company.use-case.js';
-import type { CreateCompanyInput, UpdateCompanyInput } from '@application/dto/company.dto.js';
-import type { RequestWithUser } from '../middleware/dev-user.middleware.js';
+import { CreateCompanyUseCase } from '@application/use-cases/companies/create-company.use-case';
+import { DeleteCompanyUseCase } from '@application/use-cases/companies/delete-company.use-case';
+import { GetCompanyUseCase } from '@application/use-cases/companies/get-company.use-case';
+import { ListCompaniesUseCase } from '@application/use-cases/companies/list-companies.use-case';
+import { UpdateCompanyUseCase } from '@application/use-cases/companies/update-company.use-case';
+import type { CreateCompanyInput, UpdateCompanyInput } from '@application/dto/company.dto';
+import type { RequestWithUser } from '../middleware/dev-user.middleware';
 
 @Controller('companies')
 export class CompaniesController {
   constructor(
-    private readonly listCompanies: ListCompaniesUseCase,
-    private readonly createCompany: CreateCompanyUseCase,
-    private readonly getCompany: GetCompanyUseCase,
-    private readonly updateCompany: UpdateCompanyUseCase,
-    private readonly deleteCompany: DeleteCompanyUseCase,
+    @Inject(ListCompaniesUseCase) private readonly listCompanies: ListCompaniesUseCase,
+    @Inject(CreateCompanyUseCase) private readonly createCompany: CreateCompanyUseCase,
+    @Inject(GetCompanyUseCase) private readonly getCompany: GetCompanyUseCase,
+    @Inject(UpdateCompanyUseCase) private readonly updateCompany: UpdateCompanyUseCase,
+    @Inject(DeleteCompanyUseCase) private readonly deleteCompany: DeleteCompanyUseCase,
   ) {}
 
   @Get()

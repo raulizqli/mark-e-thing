@@ -1,8 +1,8 @@
 // apps/api/src/infrastructure/ai/mock-content.generator.spec.ts
 
 import { describe, expect, it } from 'vitest';
-import type { GenerateContentParams } from '@domain/services/content-generator.port.js';
-import { MockContentGenerator } from './mock-content.generator.js';
+import type { GenerateContentParams } from '@domain/services/content-generator.port';
+import { MockContentGenerator } from './mock-content.generator';
 
 const baseParams: GenerateContentParams = {
   company: {

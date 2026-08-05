@@ -1,12 +1,12 @@
 // apps/api/src/application/use-cases/content/restore-content-version.use-case.spec.ts
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { RestoreContentVersionUseCase } from './restore-content-version.use-case.js';
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { Company } from '../../../domain/entities/company.entity.js';
-import type { Content, ContentVersion } from '../../../domain/entities/content.entity.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import { RestoreContentVersionUseCase } from './restore-content-version.use-case';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { Company } from '../../../domain/entities/company.entity';
+import type { Content, ContentVersion } from '../../../domain/entities/content.entity';
+import { AppError } from '../../../shared/errors/app-error';
 
 const userId = 'user-1';
 const companyId = 'company-1';

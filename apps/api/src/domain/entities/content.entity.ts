@@ -1,6 +1,6 @@
 // apps/api/src/domain/entities/content.entity.ts
 
-import type { ContentStatus, ContentType } from '../types/enums.js';
+import type { ContentStatus, ContentType } from '../types/enums';
 
 export interface Content {
   id: string;

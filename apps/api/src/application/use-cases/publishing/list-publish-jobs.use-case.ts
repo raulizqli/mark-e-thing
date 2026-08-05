@@ -1,10 +1,10 @@
 // apps/api/src/application/use-cases/publishing/list-publish-jobs.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { PublishRepository } from '../../../domain/repositories/publish.repository.js';
-import type { PublishJob } from '../../../domain/entities/publish.entity.js';
-import type { PublishJobStatus, PublishPlatform } from '../../../domain/types/enums.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { PublishRepository } from '../../../domain/repositories/publish.repository';
+import type { PublishJob } from '../../../domain/entities/publish.entity';
+import type { PublishJobStatus, PublishPlatform } from '../../../domain/types/enums';
+import { AppError } from '../../../shared/errors/app-error';
 
 export interface ListPublishJobsInput {
   companyId: string;

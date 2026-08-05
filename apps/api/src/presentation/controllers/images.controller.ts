@@ -1,12 +1,12 @@
 // apps/api/src/presentation/controllers/images.controller.ts
 
-import { Body, Controller, Param, Post, Req } from '@nestjs/common';
-import { GenerateImageUseCase } from '@application/use-cases/images/generate-image.use-case.js';
-import type { RequestWithUser } from '../middleware/dev-user.middleware.js';
+import { Inject, Body, Controller, Param, Post, Req } from '@nestjs/common';
+import { GenerateImageUseCase } from '@application/use-cases/images/generate-image.use-case';
+import type { RequestWithUser } from '../middleware/dev-user.middleware';
 
 @Controller('companies/:companyId/images')
 export class ImagesController {
-  constructor(private readonly generateImage: GenerateImageUseCase) {}
+  constructor(@Inject(GenerateImageUseCase) private readonly generateImage: GenerateImageUseCase) {}
 
   @Post('generate')
   async generate(

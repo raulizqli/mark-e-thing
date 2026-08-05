@@ -2,12 +2,12 @@
 
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
-import { env } from '../../config/env.js';
+import { env } from '../../config/env';
 import type {
   ContentGeneratorPort,
   GeneratedContentResult,
   GenerateContentParams,
-} from '@domain/services/content-generator.port.js';
+} from '@domain/services/content-generator.port';
 
 const responseSchema = {
   type: 'object',

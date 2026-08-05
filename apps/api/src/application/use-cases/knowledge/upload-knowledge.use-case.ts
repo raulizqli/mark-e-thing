@@ -1,12 +1,12 @@
 // apps/api/src/application/use-cases/knowledge/upload-knowledge.use-case.ts
 
 import { randomUUID } from 'node:crypto';
-import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository.js';
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { StoragePort } from '../../../domain/services/storage.port.js';
-import type { KnowledgeDocument } from '../../../domain/entities/knowledge-document.entity.js';
-import type { UploadKnowledgeInput } from '../../dto/knowledge.dto.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { StoragePort } from '../../../domain/services/storage.port';
+import type { KnowledgeDocument } from '../../../domain/entities/knowledge-document.entity';
+import type { UploadKnowledgeInput } from '../../dto/knowledge.dto';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class UploadKnowledgeUseCase {
   constructor(

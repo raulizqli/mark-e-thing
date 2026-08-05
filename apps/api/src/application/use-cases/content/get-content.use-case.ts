@@ -1,9 +1,9 @@
 // apps/api/src/application/use-cases/content/get-content.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { Content, ContentVersion } from '../../../domain/entities/content.entity.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { Content, ContentVersion } from '../../../domain/entities/content.entity';
+import { AppError } from '../../../shared/errors/app-error';
 
 export interface ContentWithVersions {
   content: Content;

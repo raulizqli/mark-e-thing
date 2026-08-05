@@ -8,7 +8,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import type { Response } from 'express';
-import { AppError } from '@shared/errors/app-error.js';
+import { AppError } from '@shared/errors/app-error';
 
 @Catch()
 export class AppErrorFilter implements ExceptionFilter {

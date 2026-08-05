@@ -1,6 +1,6 @@
 // apps/api/src/domain/services/image-generator.port.ts
 
-import type { Company } from '../entities/company.entity.js';
+import type { Company } from '../entities/company.entity';
 
 export interface GeneratedImageResult {
   imageBuffer: Buffer;

@@ -1,6 +1,6 @@
 // apps/api/src/domain/entities/publish.entity.ts
 
-import type { PublishJobStatus, PublishPlatform } from '../types/enums.js';
+import type { PublishJobStatus, PublishPlatform } from '../types/enums';
 
 export interface SocialConnection {
   id: string;

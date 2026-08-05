@@ -1,10 +1,10 @@
 // apps/api/src/application/use-cases/knowledge/list-knowledge.use-case.ts
 
-import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository.js';
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { KnowledgeDocument } from '../../../domain/entities/knowledge-document.entity.js';
-import type { ListKnowledgeInput } from '../../dto/knowledge.dto.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { KnowledgeDocument } from '../../../domain/entities/knowledge-document.entity';
+import type { ListKnowledgeInput } from '../../dto/knowledge.dto';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class ListKnowledgeUseCase {
   constructor(

@@ -1,10 +1,10 @@
 // apps/api/src/application/use-cases/calendar/list-calendar.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { CalendarRepository } from '../../../domain/repositories/calendar.repository.js';
-import type { CalendarEntry } from '../../../domain/entities/calendar-entry.entity.js';
-import type { ListCalendarInput } from '../../dto/calendar.dto.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { CalendarRepository } from '../../../domain/repositories/calendar.repository';
+import type { CalendarEntry } from '../../../domain/entities/calendar-entry.entity';
+import type { ListCalendarInput } from '../../dto/calendar.dto';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class ListCalendarUseCase {
   constructor(

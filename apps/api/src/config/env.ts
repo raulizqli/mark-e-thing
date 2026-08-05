@@ -5,7 +5,9 @@ import { resolve } from 'node:path';
 import { z } from 'zod';
 
 config({ path: resolve(process.cwd(), '../../.env') });
+config({ path: resolve(process.cwd(), '../.env') });
 config({ path: resolve(process.cwd(), '.env') });
+config({ path: resolve(process.cwd(), '../../../.env') });
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -36,4 +38,7 @@ if (!parsed.success) {
 
 export const env = parsed.data;
 
-export const hasOpenAiKey = Boolean(env.OPENAI_API_KEY?.trim());
+const rawKey = env.OPENAI_API_KEY?.trim() ?? '';
+export const hasOpenAiKey = Boolean(
+  rawKey && rawKey !== 'sk-...' && !rawKey.includes('your_'),
+);

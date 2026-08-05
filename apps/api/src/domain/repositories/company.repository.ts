@@ -4,7 +4,7 @@ import type {
   Company,
   CreateCompanyData,
   UpdateCompanyData,
-} from '../entities/company.entity.js';
+} from '../entities/company.entity';
 
 export interface CompanyRepository {
   create(data: CreateCompanyData): Promise<Company>;

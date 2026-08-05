@@ -3,7 +3,7 @@
 import type {
   CreateKnowledgeDocumentData,
   KnowledgeDocument,
-} from '../entities/knowledge-document.entity.js';
+} from '../entities/knowledge-document.entity';
 
 export interface KnowledgeRepository {
   create(data: CreateKnowledgeDocumentData): Promise<KnowledgeDocument>;

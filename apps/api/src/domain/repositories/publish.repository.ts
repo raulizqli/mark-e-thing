@@ -5,8 +5,8 @@ import type {
   PublishJob,
   SocialConnection,
   UpdatePublishJobData,
-} from '../entities/publish.entity.js';
-import type { PublishJobStatus, PublishPlatform } from '../types/enums.js';
+} from '../entities/publish.entity';
+import type { PublishJobStatus, PublishPlatform } from '../types/enums';
 
 export interface PublishJobListFilters {
   status?: PublishJobStatus;

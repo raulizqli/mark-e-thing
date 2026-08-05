@@ -2,12 +2,12 @@
 
 import { Injectable } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { env } from '../../config/env.js';
+import { env } from '../../config/env';
 import type {
   GeneratedImageResult,
   GenerateImageParams,
   ImageGeneratorPort,
-} from '@domain/services/image-generator.port.js';
+} from '@domain/services/image-generator.port';
 
 @Injectable()
 export class MockImageGenerator implements ImageGeneratorPort {

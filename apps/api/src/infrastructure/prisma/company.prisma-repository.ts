@@ -1,17 +1,17 @@
 // apps/api/src/infrastructure/prisma/company.prisma-repository.ts
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type {
   Company,
   CreateCompanyData,
   UpdateCompanyData,
-} from '@domain/entities/company.entity.js';
-import type { CompanyRepository } from '@domain/repositories/company.repository.js';
-import { PrismaService } from './prisma.service.js';
+} from '@domain/entities/company.entity';
+import type { CompanyRepository } from '@domain/repositories/company.repository';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class CompanyPrismaRepository implements CompanyRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async create(data: CreateCompanyData): Promise<Company> {
     const row = await this.prisma.company.create({

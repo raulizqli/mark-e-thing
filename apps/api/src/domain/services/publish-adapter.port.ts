@@ -1,8 +1,8 @@
 // apps/api/src/domain/services/publish-adapter.port.ts
 
-import type { Content } from '../entities/content.entity.js';
-import type { SocialConnection } from '../entities/publish.entity.js';
-import type { PublishPlatform } from '../types/enums.js';
+import type { Content } from '../entities/content.entity';
+import type { SocialConnection } from '../entities/publish.entity';
+import type { PublishPlatform } from '../types/enums';
 
 export interface PublishResult {
   externalId: string;

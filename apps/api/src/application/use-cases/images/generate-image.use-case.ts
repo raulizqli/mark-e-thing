@@ -1,13 +1,13 @@
 // apps/api/src/application/use-cases/images/generate-image.use-case.ts
 
 import { randomUUID } from 'node:crypto';
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { ImageRepository } from '../../../domain/repositories/image.repository.js';
-import type { ImageGeneratorPort } from '../../../domain/services/image-generator.port.js';
-import type { StoragePort } from '../../../domain/services/storage.port.js';
-import type { GeneratedImage } from '../../../domain/entities/generated-image.entity.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { ImageRepository } from '../../../domain/repositories/image.repository';
+import type { ImageGeneratorPort } from '../../../domain/services/image-generator.port';
+import type { StoragePort } from '../../../domain/services/storage.port';
+import type { GeneratedImage } from '../../../domain/entities/generated-image.entity';
+import { AppError } from '../../../shared/errors/app-error';
 
 export interface GenerateImageInput {
   companyId: string;

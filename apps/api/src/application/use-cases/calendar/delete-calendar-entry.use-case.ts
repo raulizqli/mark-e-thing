@@ -1,9 +1,9 @@
 // apps/api/src/application/use-cases/calendar/delete-calendar-entry.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { CalendarRepository } from '../../../domain/repositories/calendar.repository.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { CalendarRepository } from '../../../domain/repositories/calendar.repository';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class DeleteCalendarEntryUseCase {
   constructor(

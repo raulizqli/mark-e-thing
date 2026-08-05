@@ -1,8 +1,8 @@
 // apps/api/src/application/use-cases/companies/create-company.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { Company } from '../../../domain/entities/company.entity.js';
-import type { CreateCompanyInput } from '../../dto/company.dto.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { Company } from '../../../domain/entities/company.entity';
+import type { CreateCompanyInput } from '../../dto/company.dto';
 
 export class CreateCompanyUseCase {
   constructor(private readonly companyRepository: CompanyRepository) {}

@@ -1,9 +1,9 @@
 // apps/api/src/application/use-cases/knowledge/delete-knowledge.use-case.ts
 
-import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository.js';
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { StoragePort } from '../../../domain/services/storage.port.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { StoragePort } from '../../../domain/services/storage.port';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class DeleteKnowledgeUseCase {
   constructor(

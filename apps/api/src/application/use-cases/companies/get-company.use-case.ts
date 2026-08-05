@@ -1,8 +1,8 @@
 // apps/api/src/application/use-cases/companies/get-company.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { Company } from '../../../domain/entities/company.entity.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { Company } from '../../../domain/entities/company.entity';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class GetCompanyUseCase {
   constructor(private readonly companyRepository: CompanyRepository) {}

@@ -1,12 +1,12 @@
 // apps/api/src/application/use-cases/content/regenerate-content.use-case.ts
 
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { ContentGeneratorPort } from '../../../domain/services/content-generator.port.js';
-import type { Content } from '../../../domain/entities/content.entity.js';
-import type { RegenerateContentInput } from '../../dto/content.dto.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { KnowledgeRepository } from '../../../domain/repositories/knowledge.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { ContentGeneratorPort } from '../../../domain/services/content-generator.port';
+import type { Content } from '../../../domain/entities/content.entity';
+import type { RegenerateContentInput } from '../../dto/content.dto';
+import { AppError } from '../../../shared/errors/app-error';
 
 export class RegenerateContentUseCase {
   constructor(

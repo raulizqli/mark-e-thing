@@ -1,6 +1,6 @@
 // apps/api/src/application/dto/content.dto.ts
 
-import type { ContentStatus, ContentType } from '../../domain/types/enums.js';
+import type { ContentStatus, ContentType } from '../../domain/types/enums';
 
 export interface GenerateContentInput {
   companyId: string;

@@ -1,6 +1,7 @@
 // apps/api/src/presentation/controllers/calendar.controller.ts
 
 import {
+  Inject,
   Body,
   Controller,
   Delete,
@@ -11,21 +12,21 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
-import { DeleteCalendarEntryUseCase } from '@application/use-cases/calendar/delete-calendar-entry.use-case.js';
-import { DuplicateCalendarEntryUseCase } from '@application/use-cases/calendar/duplicate-calendar-entry.use-case.js';
-import { ListCalendarUseCase } from '@application/use-cases/calendar/list-calendar.use-case.js';
-import { RescheduleContentUseCase } from '@application/use-cases/calendar/reschedule-content.use-case.js';
-import { ScheduleContentUseCase } from '@application/use-cases/calendar/schedule-content.use-case.js';
-import type { RequestWithUser } from '../middleware/dev-user.middleware.js';
+import { DeleteCalendarEntryUseCase } from '@application/use-cases/calendar/delete-calendar-entry.use-case';
+import { DuplicateCalendarEntryUseCase } from '@application/use-cases/calendar/duplicate-calendar-entry.use-case';
+import { ListCalendarUseCase } from '@application/use-cases/calendar/list-calendar.use-case';
+import { RescheduleContentUseCase } from '@application/use-cases/calendar/reschedule-content.use-case';
+import { ScheduleContentUseCase } from '@application/use-cases/calendar/schedule-content.use-case';
+import type { RequestWithUser } from '../middleware/dev-user.middleware';
 
 @Controller('companies/:companyId/calendar')
 export class CalendarController {
   constructor(
-    private readonly listCalendar: ListCalendarUseCase,
-    private readonly scheduleContent: ScheduleContentUseCase,
-    private readonly rescheduleContent: RescheduleContentUseCase,
-    private readonly deleteEntry: DeleteCalendarEntryUseCase,
-    private readonly duplicateEntry: DuplicateCalendarEntryUseCase,
+    @Inject(ListCalendarUseCase) private readonly listCalendar: ListCalendarUseCase,
+    @Inject(ScheduleContentUseCase) private readonly scheduleContent: ScheduleContentUseCase,
+    @Inject(RescheduleContentUseCase) private readonly rescheduleContent: RescheduleContentUseCase,
+    @Inject(DeleteCalendarEntryUseCase) private readonly deleteEntry: DeleteCalendarEntryUseCase,
+    @Inject(DuplicateCalendarEntryUseCase) private readonly duplicateEntry: DuplicateCalendarEntryUseCase,
   ) {}
 
   @Get()

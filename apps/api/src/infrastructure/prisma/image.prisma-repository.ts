@@ -1,16 +1,16 @@
 // apps/api/src/infrastructure/prisma/image.prisma-repository.ts
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type {
   CreateGeneratedImageData,
   GeneratedImage,
-} from '@domain/entities/generated-image.entity.js';
-import type { ImageRepository } from '@domain/repositories/image.repository.js';
-import { PrismaService } from './prisma.service.js';
+} from '@domain/entities/generated-image.entity';
+import type { ImageRepository } from '@domain/repositories/image.repository';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class ImagePrismaRepository implements ImageRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async create(data: CreateGeneratedImageData): Promise<GeneratedImage> {
     const row = await this.prisma.generatedImage.create({

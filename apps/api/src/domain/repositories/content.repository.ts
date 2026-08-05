@@ -1,13 +1,13 @@
 // apps/api/src/domain/repositories/content.repository.ts
 
-import type { ContentStatus, ContentType } from '../types/enums.js';
+import type { ContentStatus, ContentType } from '../types/enums';
 import type {
   Content,
   ContentVersion,
   CreateContentData,
   CreateContentVersionData,
   UpdateContentData,
-} from '../entities/content.entity.js';
+} from '../entities/content.entity';
 
 export interface ContentListFilters {
   status?: ContentStatus;

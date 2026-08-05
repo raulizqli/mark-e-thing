@@ -1,6 +1,6 @@
 // apps/api/src/application/dto/knowledge.dto.ts
 
-import type { KnowledgeType } from '../../domain/types/enums.js';
+import type { KnowledgeType } from '../../domain/types/enums';
 
 export interface UploadKnowledgeInput {
   companyId: string;

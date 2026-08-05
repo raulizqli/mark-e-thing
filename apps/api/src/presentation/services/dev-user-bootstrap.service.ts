@@ -1,8 +1,8 @@
 // apps/api/src/presentation/services/dev-user-bootstrap.service.ts
 
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { env } from '../../config/env.js';
-import { PrismaService } from '@infrastructure/prisma/prisma.service.js';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { env } from '../../config/env';
+import { PrismaService } from '@infrastructure/prisma/prisma.service';
 
 export interface DevUser {
   id: string;
@@ -14,7 +14,7 @@ export interface DevUser {
 export class DevUserBootstrapService implements OnModuleInit {
   private cachedUser: DevUser | null = null;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async onModuleInit(): Promise<void> {
     const row = await this.prisma.user.upsert({

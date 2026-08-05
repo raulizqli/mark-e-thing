@@ -12,32 +12,32 @@ import {
   PUBLISH_ADAPTER_REGISTRY,
   PUBLISH_REPOSITORY,
   STORAGE_SERVICE,
-} from '@domain/repositories/tokens.js';
-import { InfrastructureModule } from '@infrastructure/infrastructure.module.js';
-import { CreateCompanyUseCase } from './use-cases/companies/create-company.use-case.js';
-import { DeleteCompanyUseCase } from './use-cases/companies/delete-company.use-case.js';
-import { GetCompanyUseCase } from './use-cases/companies/get-company.use-case.js';
-import { ListCompaniesUseCase } from './use-cases/companies/list-companies.use-case.js';
-import { UpdateCompanyUseCase } from './use-cases/companies/update-company.use-case.js';
-import { DeleteCalendarEntryUseCase } from './use-cases/calendar/delete-calendar-entry.use-case.js';
-import { DuplicateCalendarEntryUseCase } from './use-cases/calendar/duplicate-calendar-entry.use-case.js';
-import { ListCalendarUseCase } from './use-cases/calendar/list-calendar.use-case.js';
-import { RescheduleContentUseCase } from './use-cases/calendar/reschedule-content.use-case.js';
-import { ScheduleContentUseCase } from './use-cases/calendar/schedule-content.use-case.js';
-import { DuplicateContentUseCase } from './use-cases/content/duplicate-content.use-case.js';
-import { GenerateContentUseCase } from './use-cases/content/generate-content.use-case.js';
-import { GetContentUseCase } from './use-cases/content/get-content.use-case.js';
-import { ListContentUseCase } from './use-cases/content/list-content.use-case.js';
-import { ListContentVersionsUseCase } from './use-cases/content/list-content-versions.use-case.js';
-import { RegenerateContentUseCase } from './use-cases/content/regenerate-content.use-case.js';
-import { RestoreContentVersionUseCase } from './use-cases/content/restore-content-version.use-case.js';
-import { UpdateContentUseCase } from './use-cases/content/update-content.use-case.js';
-import { GenerateImageUseCase } from './use-cases/images/generate-image.use-case.js';
-import { DeleteKnowledgeUseCase } from './use-cases/knowledge/delete-knowledge.use-case.js';
-import { ListKnowledgeUseCase } from './use-cases/knowledge/list-knowledge.use-case.js';
-import { UploadKnowledgeUseCase } from './use-cases/knowledge/upload-knowledge.use-case.js';
-import { EnqueuePublishUseCase } from './use-cases/publishing/enqueue-publish.use-case.js';
-import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs.use-case.js';
+} from '@domain/repositories/tokens';
+import { InfrastructureModule } from '@infrastructure/infrastructure.module';
+import { CreateCompanyUseCase } from './use-cases/companies/create-company.use-case';
+import { DeleteCompanyUseCase } from './use-cases/companies/delete-company.use-case';
+import { GetCompanyUseCase } from './use-cases/companies/get-company.use-case';
+import { ListCompaniesUseCase } from './use-cases/companies/list-companies.use-case';
+import { UpdateCompanyUseCase } from './use-cases/companies/update-company.use-case';
+import { DeleteCalendarEntryUseCase } from './use-cases/calendar/delete-calendar-entry.use-case';
+import { DuplicateCalendarEntryUseCase } from './use-cases/calendar/duplicate-calendar-entry.use-case';
+import { ListCalendarUseCase } from './use-cases/calendar/list-calendar.use-case';
+import { RescheduleContentUseCase } from './use-cases/calendar/reschedule-content.use-case';
+import { ScheduleContentUseCase } from './use-cases/calendar/schedule-content.use-case';
+import { DuplicateContentUseCase } from './use-cases/content/duplicate-content.use-case';
+import { GenerateContentUseCase } from './use-cases/content/generate-content.use-case';
+import { GetContentUseCase } from './use-cases/content/get-content.use-case';
+import { ListContentUseCase } from './use-cases/content/list-content.use-case';
+import { ListContentVersionsUseCase } from './use-cases/content/list-content-versions.use-case';
+import { RegenerateContentUseCase } from './use-cases/content/regenerate-content.use-case';
+import { RestoreContentVersionUseCase } from './use-cases/content/restore-content-version.use-case';
+import { UpdateContentUseCase } from './use-cases/content/update-content.use-case';
+import { GenerateImageUseCase } from './use-cases/images/generate-image.use-case';
+import { DeleteKnowledgeUseCase } from './use-cases/knowledge/delete-knowledge.use-case';
+import { ListKnowledgeUseCase } from './use-cases/knowledge/list-knowledge.use-case';
+import { UploadKnowledgeUseCase } from './use-cases/knowledge/upload-knowledge.use-case';
+import { EnqueuePublishUseCase } from './use-cases/publishing/enqueue-publish.use-case';
+import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs.use-case';
 
 @Module({
   imports: [InfrastructureModule],

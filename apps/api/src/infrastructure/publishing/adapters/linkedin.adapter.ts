@@ -1,10 +1,10 @@
 // apps/api/src/infrastructure/publishing/adapters/linkedin.adapter.ts
 
 import { Injectable } from '@nestjs/common';
-import type { Content } from '@domain/entities/content.entity.js';
-import type { SocialConnection } from '@domain/entities/publish.entity.js';
-import type { PublishAdapter, PublishResult } from '@domain/services/publish-adapter.port.js';
-import { AppError } from '@shared/errors/app-error.js';
+import type { Content } from '@domain/entities/content.entity';
+import type { SocialConnection } from '@domain/entities/publish.entity';
+import type { PublishAdapter, PublishResult } from '@domain/services/publish-adapter.port';
+import { AppError } from '@shared/errors/app-error';
 
 @Injectable()
 export class LinkedinAdapter implements PublishAdapter {

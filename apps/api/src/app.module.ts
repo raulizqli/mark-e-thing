@@ -1,9 +1,9 @@
 // apps/api/src/app.module.ts
 
 import { Module } from '@nestjs/common';
-import { InfrastructureModule } from '@infrastructure/infrastructure.module.js';
-import { ApplicationModule } from '@application/application.module.js';
-import { PresentationModule } from '@presentation/presentation.module.js';
+import { InfrastructureModule } from '@infrastructure/infrastructure.module';
+import { ApplicationModule } from '@application/application.module';
+import { PresentationModule } from '@presentation/presentation.module';
 
 @Module({
   imports: [InfrastructureModule, ApplicationModule, PresentationModule],

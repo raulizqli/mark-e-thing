@@ -1,14 +1,14 @@
 // apps/api/src/application/use-cases/calendar/schedule-content.use-case.spec.ts
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ScheduleContentUseCase } from './schedule-content.use-case.js';
-import type { CompanyRepository } from '../../../domain/repositories/company.repository.js';
-import type { ContentRepository } from '../../../domain/repositories/content.repository.js';
-import type { CalendarRepository } from '../../../domain/repositories/calendar.repository.js';
-import type { Company } from '../../../domain/entities/company.entity.js';
-import type { Content } from '../../../domain/entities/content.entity.js';
-import type { CalendarEntry } from '../../../domain/entities/calendar-entry.entity.js';
-import { AppError } from '../../../shared/errors/app-error.js';
+import { ScheduleContentUseCase } from './schedule-content.use-case';
+import type { CompanyRepository } from '../../../domain/repositories/company.repository';
+import type { ContentRepository } from '../../../domain/repositories/content.repository';
+import type { CalendarRepository } from '../../../domain/repositories/calendar.repository';
+import type { Company } from '../../../domain/entities/company.entity';
+import type { Content } from '../../../domain/entities/content.entity';
+import type { CalendarEntry } from '../../../domain/entities/calendar-entry.entity';
+import { AppError } from '../../../shared/errors/app-error';
 
 const userId = 'user-1';
 const companyId = 'company-1';

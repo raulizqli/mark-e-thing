@@ -1,16 +1,16 @@
 // apps/api/src/presentation/controllers/publishing.controller.ts
 
-import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
-import { EnqueuePublishUseCase } from '@application/use-cases/publishing/enqueue-publish.use-case.js';
-import { ListPublishJobsUseCase } from '@application/use-cases/publishing/list-publish-jobs.use-case.js';
-import type { PublishJobStatus, PublishPlatform } from '@domain/types/enums.js';
-import type { RequestWithUser } from '../middleware/dev-user.middleware.js';
+import { Inject, Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
+import { EnqueuePublishUseCase } from '@application/use-cases/publishing/enqueue-publish.use-case';
+import { ListPublishJobsUseCase } from '@application/use-cases/publishing/list-publish-jobs.use-case';
+import type { PublishJobStatus, PublishPlatform } from '@domain/types/enums';
+import type { RequestWithUser } from '../middleware/dev-user.middleware';
 
 @Controller('companies/:companyId/publish')
 export class PublishingController {
   constructor(
-    private readonly enqueuePublish: EnqueuePublishUseCase,
-    private readonly listJobs: ListPublishJobsUseCase,
+    @Inject(EnqueuePublishUseCase) private readonly enqueuePublish: EnqueuePublishUseCase,
+    @Inject(ListPublishJobsUseCase) private readonly listJobs: ListPublishJobsUseCase,
   ) {}
 
   @Post()
