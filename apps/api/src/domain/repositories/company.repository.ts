@@ -12,4 +12,5 @@ export interface CompanyRepository {
   findByIdForUser(id: string, userId: string): Promise<Company | null>;
   findAllByUserId(userId: string): Promise<Company[]>;
   update(id: string, data: UpdateCompanyData): Promise<Company>;
+  delete(id: string): Promise<void>;
 }
