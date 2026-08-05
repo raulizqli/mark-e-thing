@@ -6,3 +6,4 @@ export * from './content.entity';
 export * from './generated-image.entity';
 export * from './calendar-entry.entity';
 export * from './publish.entity';
+export * from './agent.entity';

@@ -2,6 +2,7 @@
 
 import { Global, Module } from '@nestjs/common';
 import {
+  AI_GATEWAY,
   CALENDAR_REPOSITORY,
   COMPANY_REPOSITORY,
   CONTENT_GENERATOR,
@@ -13,7 +14,9 @@ import {
   PUBLISH_REPOSITORY,
   STORAGE_SERVICE,
 } from '@domain/repositories/tokens';
-import { createContentGenerator, createImageGenerator } from './ai/ai.factory';
+import { createAiGateway } from './ai/ai.factory';
+import { GatewayContentGenerator } from './ai/gateway-content.generator';
+import { GatewayImageGenerator } from './ai/gateway-image.generator';
 import { CalendarPrismaRepository } from './prisma/calendar.prisma-repository';
 import { CompanyPrismaRepository } from './prisma/company.prisma-repository';
 import { ContentPrismaRepository } from './prisma/content.prisma-repository';
@@ -35,8 +38,17 @@ import { LocalStorageService } from './storage/local-storage.service';
     { provide: CALENDAR_REPOSITORY, useClass: CalendarPrismaRepository },
     { provide: PUBLISH_REPOSITORY, useClass: PublishPrismaRepository },
     { provide: STORAGE_SERVICE, useClass: LocalStorageService },
-    { provide: CONTENT_GENERATOR, useFactory: createContentGenerator },
-    { provide: IMAGE_GENERATOR, useFactory: createImageGenerator },
+    { provide: AI_GATEWAY, useFactory: createAiGateway },
+    {
+      provide: CONTENT_GENERATOR,
+      useFactory: (gateway) => new GatewayContentGenerator(gateway),
+      inject: [AI_GATEWAY],
+    },
+    {
+      provide: IMAGE_GENERATOR,
+      useFactory: (gateway) => new GatewayImageGenerator(gateway),
+      inject: [AI_GATEWAY],
+    },
     { provide: PUBLISH_ADAPTER_REGISTRY, useClass: PublishAdapterRegistryService },
   ],
   exports: [
@@ -48,6 +60,7 @@ import { LocalStorageService } from './storage/local-storage.service';
     CALENDAR_REPOSITORY,
     PUBLISH_REPOSITORY,
     STORAGE_SERVICE,
+    AI_GATEWAY,
     CONTENT_GENERATOR,
     IMAGE_GENERATOR,
     PUBLISH_ADAPTER_REGISTRY,
