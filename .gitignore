@@ -1,43 +1,37 @@
-# // .gitignore
-
-# Dependency directories
+# Dependencies
 node_modules/
-jspm_packages/
+.pnp
+.pnp.js
 
-# Compiled build outputs
+# Build
 dist/
 build/
-public/
+.next/
+out/
+*.tsbuildinfo
 
-# Environment configurations and secrets (CRITICAL)
+# Env
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.env
+.env.*.local
+apps/web/.env.local
+apps/api/.env
 
-# Local sqlite if used (keep prisma/migrations in git)
-*.db
-*.db-journal
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pino-*.log
+# Logs / OS
 *.log
-
-# Testing coverage maps
-coverage/
-.nyc_output/
-
-# Editor and System files
+npm-debug.log*
 .DS_Store
+coverage/
+.turbo/
+
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+
+# Storage local
+.tmp/
+uploads/
+
+# IDE
 .idea/
 .vscode/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.swp

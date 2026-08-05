@@ -1,0 +1,12 @@
+// apps/api/src/domain/repositories/tokens.ts
+
+export const COMPANY_REPOSITORY = Symbol('COMPANY_REPOSITORY');
+export const KNOWLEDGE_REPOSITORY = Symbol('KNOWLEDGE_REPOSITORY');
+export const CONTENT_REPOSITORY = Symbol('CONTENT_REPOSITORY');
+export const IMAGE_REPOSITORY = Symbol('IMAGE_REPOSITORY');
+export const CALENDAR_REPOSITORY = Symbol('CALENDAR_REPOSITORY');
+export const PUBLISH_REPOSITORY = Symbol('PUBLISH_REPOSITORY');
+export const CONTENT_GENERATOR = Symbol('CONTENT_GENERATOR');
+export const IMAGE_GENERATOR = Symbol('IMAGE_GENERATOR');
+export const STORAGE_SERVICE = Symbol('STORAGE_SERVICE');
+export const PUBLISH_ADAPTER_REGISTRY = Symbol('PUBLISH_ADAPTER_REGISTRY');
