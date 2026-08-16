@@ -43,6 +43,12 @@ const envSchema = z.object({
     .string()
     .url()
     .default('http://localhost:3001/oauth/linkedin/callback'),
+  META_APP_ID: z.string().optional(),
+  META_APP_SECRET: z.string().optional(),
+  META_REDIRECT_URI: z
+    .string()
+    .url()
+    .default('http://localhost:3001/oauth/meta/callback'),
   OAUTH_STATE_SECRET: z.string().default('markething-oauth-dev-secret'),
   FREE_MONTHLY_CONTENT_QUOTA: z.coerce.number().default(50),
   FREE_MONTHLY_IMAGE_QUOTA: z.coerce.number().default(20),
@@ -81,3 +87,5 @@ export const hasS3Storage =
   isUsableKey(env.S3_SECRET_ACCESS_KEY);
 export const hasLinkedInOAuth =
   isUsableKey(env.LINKEDIN_CLIENT_ID) && isUsableKey(env.LINKEDIN_CLIENT_SECRET);
+export const hasMetaOAuth =
+  isUsableKey(env.META_APP_ID) && isUsableKey(env.META_APP_SECRET);

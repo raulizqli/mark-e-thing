@@ -15,6 +15,7 @@ import {
 } from '@domain/repositories/tokens';
 import { createContentGenerator, createImageGenerator } from './ai/ai.factory';
 import { LinkedInOAuthService } from './oauth/linkedin-oauth.service';
+import { MetaOAuthService } from './oauth/meta-oauth.service';
 import { CalendarPrismaRepository } from './prisma/calendar.prisma-repository';
 import { CompanyPrismaRepository } from './prisma/company.prisma-repository';
 import { ContentPrismaRepository } from './prisma/content.prisma-repository';
@@ -30,6 +31,7 @@ import { createStorageService } from './storage/storage.factory';
   providers: [
     PrismaService,
     LinkedInOAuthService,
+    MetaOAuthService,
     { provide: COMPANY_REPOSITORY, useClass: CompanyPrismaRepository },
     { provide: KNOWLEDGE_REPOSITORY, useClass: KnowledgePrismaRepository },
     { provide: CONTENT_REPOSITORY, useClass: ContentPrismaRepository },
@@ -44,6 +46,7 @@ import { createStorageService } from './storage/storage.factory';
   exports: [
     PrismaService,
     LinkedInOAuthService,
+    MetaOAuthService,
     COMPANY_REPOSITORY,
     KNOWLEDGE_REPOSITORY,
     CONTENT_REPOSITORY,

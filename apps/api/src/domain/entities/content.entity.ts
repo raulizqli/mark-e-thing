@@ -18,6 +18,7 @@ export interface Content {
   scheduledAt: Date | null;
   publishedAt: Date | null;
   imageId: string | null;
+  image?: { id: string; url: string | null } | null;
   metadata: Record<string, unknown> | null;
   createdAt: Date;
   updatedAt: Date;
