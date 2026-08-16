@@ -17,7 +17,7 @@ import { GetCompanyUseCase } from '@application/use-cases/companies/get-company.
 import { ListCompaniesUseCase } from '@application/use-cases/companies/list-companies.use-case';
 import { UpdateCompanyUseCase } from '@application/use-cases/companies/update-company.use-case';
 import type { CreateCompanyInput, UpdateCompanyInput } from '@application/dto/company.dto';
-import type { RequestWithUser } from '../middleware/dev-user.middleware';
+import type { RequestWithUser } from '../middleware/auth.middleware';
 
 @Controller('companies')
 export class CompaniesController {

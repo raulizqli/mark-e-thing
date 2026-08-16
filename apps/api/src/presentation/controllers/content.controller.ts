@@ -25,7 +25,7 @@ import type {
   UpdateContentInput,
 } from '@application/dto/content.dto';
 import type { ContentStatus, ContentType } from '@domain/types/enums';
-import type { RequestWithUser } from '../middleware/dev-user.middleware';
+import type { RequestWithUser } from '../middleware/auth.middleware';
 
 @Controller('companies/:companyId/content')
 export class ContentController {

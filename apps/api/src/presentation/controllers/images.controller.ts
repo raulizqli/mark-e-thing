@@ -2,7 +2,7 @@
 
 import { Inject, Body, Controller, Param, Post, Req } from '@nestjs/common';
 import { GenerateImageUseCase } from '@application/use-cases/images/generate-image.use-case';
-import type { RequestWithUser } from '../middleware/dev-user.middleware';
+import type { RequestWithUser } from '../middleware/auth.middleware';
 
 @Controller('companies/:companyId/images')
 export class ImagesController {

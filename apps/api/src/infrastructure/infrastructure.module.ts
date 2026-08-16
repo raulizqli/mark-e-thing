@@ -14,6 +14,7 @@ import {
   STORAGE_SERVICE,
 } from '@domain/repositories/tokens';
 import { createContentGenerator, createImageGenerator } from './ai/ai.factory';
+import { LinkedInOAuthService } from './oauth/linkedin-oauth.service';
 import { CalendarPrismaRepository } from './prisma/calendar.prisma-repository';
 import { CompanyPrismaRepository } from './prisma/company.prisma-repository';
 import { ContentPrismaRepository } from './prisma/content.prisma-repository';
@@ -22,25 +23,27 @@ import { KnowledgePrismaRepository } from './prisma/knowledge.prisma-repository'
 import { PrismaService } from './prisma/prisma.service';
 import { PublishPrismaRepository } from './prisma/publish.prisma-repository';
 import { PublishAdapterRegistryService } from './publishing/publish-adapter.registry';
-import { LocalStorageService } from './storage/local-storage.service';
+import { createStorageService } from './storage/storage.factory';
 
 @Global()
 @Module({
   providers: [
     PrismaService,
+    LinkedInOAuthService,
     { provide: COMPANY_REPOSITORY, useClass: CompanyPrismaRepository },
     { provide: KNOWLEDGE_REPOSITORY, useClass: KnowledgePrismaRepository },
     { provide: CONTENT_REPOSITORY, useClass: ContentPrismaRepository },
     { provide: IMAGE_REPOSITORY, useClass: ImagePrismaRepository },
     { provide: CALENDAR_REPOSITORY, useClass: CalendarPrismaRepository },
     { provide: PUBLISH_REPOSITORY, useClass: PublishPrismaRepository },
-    { provide: STORAGE_SERVICE, useClass: LocalStorageService },
+    { provide: STORAGE_SERVICE, useFactory: createStorageService },
     { provide: CONTENT_GENERATOR, useFactory: createContentGenerator },
     { provide: IMAGE_GENERATOR, useFactory: createImageGenerator },
     { provide: PUBLISH_ADAPTER_REGISTRY, useClass: PublishAdapterRegistryService },
   ],
   exports: [
     PrismaService,
+    LinkedInOAuthService,
     COMPANY_REPOSITORY,
     KNOWLEDGE_REPOSITORY,
     CONTENT_REPOSITORY,

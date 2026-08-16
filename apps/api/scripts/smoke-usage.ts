@@ -40,6 +40,10 @@ async function main(): Promise<void> {
   assert(company.id, 'company id missing');
   console.log(`✓ company ${company.id}`);
 
+  const me = await request<{ id: string; usage?: { content: { quota: number } } }>('GET', '/me');
+  assert(me.id, 'me missing');
+  console.log('✓ me + quotas');
+
   const form = new FormData();
   form.append('title', 'Brand FAQ');
   form.append('type', 'FAQ');

@@ -20,7 +20,7 @@ import { UploadKnowledgeUseCase } from '@application/use-cases/knowledge/upload-
 import type { KnowledgeType } from '@domain/types/enums';
 import { extractText } from '@infrastructure/parsers/text-extractor';
 import { AppError } from '@shared/errors/app-error';
-import type { RequestWithUser } from '../middleware/dev-user.middleware';
+import type { RequestWithUser } from '../middleware/auth.middleware';
 
 @Controller('companies/:companyId/knowledge')
 export class KnowledgeController {

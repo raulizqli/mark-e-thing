@@ -23,6 +23,9 @@ export class DevUserBootstrapService implements OnModuleInit {
         id: env.DEV_USER_ID,
         email: env.DEV_USER_EMAIL,
         name: env.DEV_USER_NAME,
+        plan: 'free',
+        monthlyContentQuota: env.FREE_MONTHLY_CONTENT_QUOTA,
+        monthlyImageQuota: env.FREE_MONTHLY_IMAGE_QUOTA,
       },
       update: {
         email: env.DEV_USER_EMAIL,

@@ -1,18 +1,24 @@
+// apps/web/src/components/layout/app-shell.tsx
+
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Building2,
   Calendar,
   History,
   LayoutDashboard,
+  Link2,
+  LogOut,
   Menu,
   Sparkles,
   X,
 } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "@/components/brand/logo";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth/auth-context";
 import { cn } from "@/lib/cn";
 
 interface AppShellProps {
@@ -33,16 +39,32 @@ function companyNav(companyId: string) {
     { href: `/companies/${companyId}/calendar`, label: "Calendario", icon: Calendar },
     { href: `/companies/${companyId}/knowledge`, label: "Conocimiento", icon: Building2 },
     { href: `/companies/${companyId}/content`, label: "Historial", icon: History },
+    { href: `/companies/${companyId}/connections`, label: "Conexiones", icon: Link2 },
   ];
 }
 
 export function AppShell({ children, companyId, companyName }: AppShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { mode, signOut, user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navItems = companyId ? companyNav(companyId) : baseNav;
 
-  const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: typeof LayoutDashboard }) => {
+  async function handleSignOut() {
+    await signOut();
+    router.push(mode === "supabase" ? "/login" : "/");
+  }
+
+  const NavLink = ({
+    href,
+    label,
+    icon: Icon,
+  }: {
+    href: string;
+    label: string;
+    icon: typeof LayoutDashboard;
+  }) => {
     const active = pathname === href || pathname.startsWith(`${href}/`);
     return (
       <Link
@@ -50,9 +72,7 @@ export function AppShell({ children, companyId, companyName }: AppShellProps) {
         onClick={() => setMobileOpen(false)}
         className={cn(
           "flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors",
-          active
-            ? "bg-teal/10 text-teal"
-            : "text-muted hover:bg-ink/5 hover:text-ink",
+          active ? "bg-teal/10 text-teal" : "text-muted hover:bg-ink/5 hover:text-ink",
         )}
       >
         <Icon className="h-4 w-4" />
@@ -68,9 +88,7 @@ export function AppShell({ children, companyId, companyName }: AppShellProps) {
           <div className="flex items-center gap-6">
             <Logo size="sm" />
             {companyName && (
-              <span className="hidden text-sm text-muted sm:inline">
-                / {companyName}
-              </span>
+              <span className="hidden text-sm text-muted sm:inline">/ {companyName}</span>
             )}
           </div>
 
@@ -80,14 +98,23 @@ export function AppShell({ children, companyId, companyName }: AppShellProps) {
             ))}
           </nav>
 
-          <button
-            type="button"
-            className="rounded-lg p-2 text-ink md:hidden"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-2">
+            {mode === "supabase" && user?.email && (
+              <span className="hidden text-xs text-muted lg:inline">{user.email}</span>
+            )}
+            <Button type="button" variant="ghost" size="sm" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Salir</span>
+            </Button>
+            <button
+              type="button"
+              className="rounded-lg p-2 text-ink md:hidden"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         {mobileOpen && (

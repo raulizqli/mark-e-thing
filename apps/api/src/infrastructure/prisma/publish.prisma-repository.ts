@@ -88,6 +88,62 @@ export class PublishPrismaRepository implements PublishRepository {
     return row ? this.mapConnection(row) : null;
   }
 
+  async listConnections(companyId: string): Promise<SocialConnection[]> {
+    const rows = await this.prisma.socialConnection.findMany({
+      where: { companyId },
+      orderBy: { platform: 'asc' },
+    });
+    return rows.map((row) => this.mapConnection(row));
+  }
+
+  async upsertConnection(data: {
+    companyId: string;
+    platform: PublishPlatform;
+    externalId?: string | null;
+    displayName?: string | null;
+    accessToken?: string | null;
+    refreshToken?: string | null;
+    metadata?: Record<string, unknown> | null;
+    connectedAt?: Date | null;
+  }): Promise<SocialConnection> {
+    const row = await this.prisma.socialConnection.upsert({
+      where: {
+        companyId_platform: {
+          companyId: data.companyId,
+          platform: data.platform,
+        },
+      },
+      create: {
+        companyId: data.companyId,
+        platform: data.platform,
+        externalId: data.externalId ?? null,
+        displayName: data.displayName ?? null,
+        accessToken: data.accessToken ?? null,
+        refreshToken: data.refreshToken ?? null,
+        metadata: (data.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
+        connectedAt: data.connectedAt ?? new Date(),
+      },
+      update: {
+        externalId: data.externalId ?? undefined,
+        displayName: data.displayName ?? undefined,
+        accessToken: data.accessToken ?? undefined,
+        refreshToken: data.refreshToken ?? undefined,
+        metadata: (data.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
+        connectedAt: data.connectedAt ?? new Date(),
+      },
+    });
+    return this.mapConnection(row);
+  }
+
+  async deleteConnection(
+    companyId: string,
+    platform: PublishPlatform,
+  ): Promise<void> {
+    await this.prisma.socialConnection.delete({
+      where: { companyId_platform: { companyId, platform } },
+    });
+  }
+
   private mapJob(row: {
     id: string;
     companyId: string;

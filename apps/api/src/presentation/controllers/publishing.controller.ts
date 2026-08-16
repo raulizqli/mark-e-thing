@@ -4,7 +4,7 @@ import { Inject, Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/
 import { EnqueuePublishUseCase } from '@application/use-cases/publishing/enqueue-publish.use-case';
 import { ListPublishJobsUseCase } from '@application/use-cases/publishing/list-publish-jobs.use-case';
 import type { PublishJobStatus, PublishPlatform } from '@domain/types/enums';
-import type { RequestWithUser } from '../middleware/dev-user.middleware';
+import type { RequestWithUser } from '../middleware/auth.middleware';
 
 @Controller('companies/:companyId/publish')
 export class PublishingController {

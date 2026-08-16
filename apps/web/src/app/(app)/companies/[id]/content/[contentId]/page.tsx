@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { ArrowLeft, RotateCcw } from "lucide-react";
 import { ScheduleContentControl } from "@/components/calendar/schedule-content-control";
+import { PublishContentControl } from "@/components/publishing/publish-content-control";
 import { AppShell } from "@/components/layout/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -105,7 +106,7 @@ export default function ContentDetailPage() {
         )}
 
         <article className="glass-panel space-y-4 p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <ScheduleContentControl
               companyId={params.id}
               contentId={content.id}
@@ -114,6 +115,14 @@ export default function ContentDetailPage() {
                 setScheduleNotice("Contenido programado en el calendario.");
                 await loadData();
               }}
+              onError={setError}
+            />
+            <PublishContentControl
+              companyId={params.id}
+              contentId={content.id}
+              onPublished={() =>
+                setScheduleNotice("Publicación a LinkedIn encolada / enviada.")
+              }
               onError={setError}
             />
           </div>

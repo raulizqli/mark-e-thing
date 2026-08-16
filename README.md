@@ -2,9 +2,20 @@
 
 SaaS de Marketing con Inteligencia Artificial. Evoluciona desde un generador de contenido (Fase 1) hacia un agente autónomo de marketing (Fase 2).
 
-## Fase 1 — MVP
+## Fase 1.5 — Productización (actual)
 
-Configura la marca una vez, genera contenido e imágenes con IA y organiza un calendario editorial. La arquitectura de publicación por adaptadores queda lista, pero **las redes sociales no publican de verdad en esta fase** (adapters stub).
+Autenticación real con **Supabase Auth**, cuotas de generación, storage S3 opcional y **LinkedIn** como primera red con OAuth + publicación real.
+
+| Pieza | Detalle |
+|---|---|
+| Auth | `AUTH_MODE=supabase` verifica JWT; `AUTH_MODE=dev` conserva demo local |
+| Cuotas | Free: 50 contents / 20 images por mes (ver `/me`) |
+| Storage | `S3_*` → S3; si no, local |
+| Publish | LinkedIn OAuth + adapter; resto stub |
+
+## Fase 1 — MVP (base)
+
+Configura la marca, genera contenido e imágenes con IA y organiza el calendario editorial.
 
 ### Capacidades
 
@@ -15,9 +26,9 @@ Configura la marca una vez, genera contenido e imágenes con IA y organiza un ca
 | Generación de contenido | Facebook, Instagram (post/carousel/story), Stories, WhatsApp Status, LinkedIn, X, Blog, Email, Promociones | Listo |
 | Imágenes | Prompt + generación (Gemini / Together / OpenAI / mock) | Listo |
 | Calendario | Vista mensual, programar desde generar/historial, arrastrar, duplicar, eliminar | Listo |
-| Publicación | Cola `PublishJob` + registry de adaptadores; **stubs** (`PLATFORM_NOT_CONFIGURED`) hasta conectar OAuth | Arquitectura lista |
+| Publicación | LinkedIn real (OAuth); resto stub | Fase 1.5 |
 | Historial | Versiones con duplicar, regenerar y restaurar | Listo |
-| Auth | Usuario de desarrollo (`DEV_USER_*`); no hay signup/login real | Solo demos internas |
+| Auth | Supabase Auth (`AUTH_MODE=supabase`) o demo (`dev`) | Fase 1.5 |
 
 ## Stack
 
@@ -25,7 +36,8 @@ Configura la marca una vez, genera contenido e imágenes con IA y organiza un ca
 - **Backend:** NestJS, Clean Architecture (domain → application → infrastructure → presentation)
 - **Datos:** PostgreSQL + Prisma
 - **IA:** Factory multi-provider (`AI_CONTENT_PROVIDER` / `AI_IMAGE_PROVIDER`) con Gemini, Groq, Together, OpenAI y mock
-- **Storage:** local MVP (S3-compatible preparado vía env)
+- **Storage:** local o S3 si `S3_BUCKET` + credenciales
+- **Auth:** Supabase JWT o modo `dev`
 
 ## Estructura
 
@@ -58,7 +70,7 @@ npm run dev
 - API: http://localhost:3001
 - Health: `GET http://localhost:3001/health`
 
-Auth en MVP: usuario de desarrollo (`DEV_USER_*` en `.env`). Se crea automáticamente al arrancar la API. **No apto para beta externa.**
+Auth: `AUTH_MODE=dev` (demo) o `supabase` (JWT). Ver `.env.example`.
 
 ## Scripts
 

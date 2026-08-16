@@ -30,4 +30,16 @@ export interface PublishRepository {
     companyId: string,
     platform: PublishPlatform,
   ): Promise<SocialConnection | null>;
+  listConnections(companyId: string): Promise<SocialConnection[]>;
+  upsertConnection(data: {
+    companyId: string;
+    platform: PublishPlatform;
+    externalId?: string | null;
+    displayName?: string | null;
+    accessToken?: string | null;
+    refreshToken?: string | null;
+    metadata?: Record<string, unknown> | null;
+    connectedAt?: Date | null;
+  }): Promise<SocialConnection>;
+  deleteConnection(companyId: string, platform: PublishPlatform): Promise<void>;
 }
