@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { ArrowLeft, RotateCcw } from "lucide-react";
+import { ScheduleContentControl } from "@/components/calendar/schedule-content-control";
 import { AppShell } from "@/components/layout/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ export default function ContentDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [restoring, setRestoring] = useState<number | null>(null);
+  const [scheduleNotice, setScheduleNotice] = useState<string | null>(null);
 
   async function loadData() {
     const [companyData, payload] = await Promise.all([
@@ -96,7 +98,26 @@ export default function ContentDetailPage() {
           </div>
         )}
 
+        {scheduleNotice && (
+          <div className="rounded-xl border border-teal/30 bg-teal/5 px-4 py-3 text-sm text-teal">
+            {scheduleNotice}
+          </div>
+        )}
+
         <article className="glass-panel space-y-4 p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <ScheduleContentControl
+              companyId={params.id}
+              contentId={content.id}
+              size="md"
+              onScheduled={async () => {
+                setScheduleNotice("Contenido programado en el calendario.");
+                await loadData();
+              }}
+              onError={setError}
+            />
+          </div>
+
           <p className="whitespace-pre-wrap text-muted">{content.copy}</p>
 
           {content.cta && (

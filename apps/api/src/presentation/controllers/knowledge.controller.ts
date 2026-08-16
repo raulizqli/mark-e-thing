@@ -55,7 +55,7 @@ export class KnowledgeController {
       fileName: file.originalname,
       mimeType: file.mimetype,
       fileBuffer: file.buffer,
-      extractedText: extractText(file.buffer, file.mimetype, file.originalname),
+      extractedText: await extractText(file.buffer, file.mimetype, file.originalname),
     });
     return { success: true, data };
   }

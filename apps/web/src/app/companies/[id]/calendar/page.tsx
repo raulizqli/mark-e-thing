@@ -1,10 +1,14 @@
+// apps/web/src/app/companies/[id]/calendar/page.tsx
+
 "use client";
 
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { format } from "date-fns";
+import { Copy, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { MonthCalendar } from "@/components/calendar/month-calendar";
+import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import type { CalendarEntry, Company } from "@/lib/types";
 
@@ -15,16 +19,18 @@ export default function CalendarPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedEntry, setSelectedEntry] = useState<CalendarEntry | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(() => new Date());
 
   const loadEntries = useCallback(async (month?: Date) => {
-    const date = month ?? new Date();
+    const date = month ?? currentMonth;
     const year = date.getFullYear();
     const monthNum = date.getMonth() + 1;
     const data = await api.get<CalendarEntry[]>(
       `/companies/${params.id}/calendar?month=${year}-${String(monthNum).padStart(2, "0")}`,
     );
     setEntries(data);
-  }, [params.id]);
+  }, [params.id, currentMonth]);
 
   useEffect(() => {
     Promise.all([
@@ -41,11 +47,41 @@ export default function CalendarPage() {
       await api.patch(`/companies/${params.id}/calendar/${entryId}`, {
         scheduledAt: newDate.toISOString(),
       });
-      await loadEntries();
+      await loadEntries(currentMonth);
       setSelectedEntry(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al reprogramar");
     }
+  }
+
+  async function handleDelete(entryId: string) {
+    setBusy(true);
+    try {
+      await api.delete(`/companies/${params.id}/calendar/${entryId}`);
+      setSelectedEntry(null);
+      await loadEntries(currentMonth);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al eliminar");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleDuplicate(entryId: string) {
+    setBusy(true);
+    try {
+      await api.post(`/companies/${params.id}/calendar/${entryId}/duplicate`);
+      await loadEntries(currentMonth);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al duplicar");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function handleMonthChange(month: Date) {
+    setCurrentMonth(month);
+    void loadEntries(month);
   }
 
   return (
@@ -54,7 +90,8 @@ export default function CalendarPage() {
         <div>
           <h1 className="font-display text-3xl text-ink">Calendario editorial</h1>
           <p className="mt-2 text-muted">
-            Visualiza y reprograma tus publicaciones. Arrastra un elemento a otro día para cambiar la fecha.
+            Visualiza, reprograma, duplica o elimina publicaciones. Arrastra un elemento a otro día
+            para cambiar la fecha.
           </p>
         </div>
 
@@ -69,25 +106,25 @@ export default function CalendarPage() {
         ) : (
           <MonthCalendar
             entries={entries}
-            onMonthChange={loadEntries}
+            onMonthChange={handleMonthChange}
             onReschedule={handleReschedule}
             onEntryClick={setSelectedEntry}
           />
         )}
 
         {selectedEntry && (
-          <div className="glass-panel p-6">
+          <div className="glass-panel space-y-4 p-6">
             <h2 className="font-display text-lg text-ink">
               {selectedEntry.content?.title ?? "Contenido programado"}
             </h2>
-            <p className="mt-2 text-sm text-muted">
+            <p className="text-sm text-muted">
               Programado para:{" "}
               {format(new Date(selectedEntry.scheduledAt), "d 'de' MMMM yyyy, HH:mm")}
             </p>
             {selectedEntry.notes && (
-              <p className="mt-2 text-sm text-muted">{selectedEntry.notes}</p>
+              <p className="text-sm text-muted">{selectedEntry.notes}</p>
             )}
-            <div className="mt-4">
+            <div>
               <label className="text-sm font-medium text-ink" htmlFor="reschedule">
                 Cambiar fecha
               </label>
@@ -103,6 +140,28 @@ export default function CalendarPage() {
                   }
                 }}
               />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={busy}
+                onClick={() => handleDuplicate(selectedEntry.id)}
+              >
+                <Copy className="h-4 w-4" />
+                Duplicar
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                disabled={busy}
+                onClick={() => handleDelete(selectedEntry.id)}
+              >
+                <Trash2 className="h-4 w-4" />
+                Eliminar
+              </Button>
             </div>
           </div>
         )}

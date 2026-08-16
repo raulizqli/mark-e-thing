@@ -1,8 +1,11 @@
+// apps/web/src/app/companies/[id]/generate/page.tsx
+
 "use client";
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ImageIcon, Sparkles } from "lucide-react";
+import { ScheduleContentControl } from "@/components/calendar/schedule-content-control";
 import { AppShell } from "@/components/layout/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,6 +33,7 @@ export default function GeneratePage() {
   const [generatingImageFor, setGeneratingImageFor] = useState<number | null>(null);
   const [images, setImages] = useState<Record<number, GeneratedImage>>({});
   const [error, setError] = useState<string | null>(null);
+  const [scheduleNotice, setScheduleNotice] = useState<string | null>(null);
 
   useEffect(() => {
     api.get<Company>(`/companies/${params.id}`).then(setCompany).catch(() => null);
@@ -151,13 +155,29 @@ export default function GeneratePage() {
           </div>
         )}
 
+        {scheduleNotice && (
+          <div className="rounded-xl border border-teal/30 bg-teal/5 px-4 py-3 text-sm text-teal">
+            {scheduleNotice}
+          </div>
+        )}
+
         {results.length > 0 && (
           <div className="space-y-6">
             <h2 className="font-display text-2xl text-ink">Resultados</h2>
             {results.map((result, index) => (
               <article key={`${result.type}-${index}`} className="glass-panel space-y-4 p-6">
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <Badge variant="teal">{result.type}</Badge>
+                  {savedContents[index]?.id && (
+                    <ScheduleContentControl
+                      companyId={params.id}
+                      contentId={savedContents[index].id}
+                      onScheduled={() =>
+                        setScheduleNotice(`"${result.title}" programado en el calendario.`)
+                      }
+                      onError={setError}
+                    />
+                  )}
                 </div>
 
                 <div>

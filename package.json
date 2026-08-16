@@ -13,6 +13,7 @@
     "dev:web": "npm run dev -w @markething/web",
     "build": "npm run build -w @markething/api && npm run build -w @markething/web",
     "test": "npm run test -w @markething/api",
+    "smoke": "npm run smoke -w @markething/api",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"
