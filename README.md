@@ -11,7 +11,7 @@ Autenticación real con **Supabase Auth**, cuotas de generación, storage S3 opc
 | Auth | `AUTH_MODE=supabase` verifica JWT; `AUTH_MODE=dev` conserva demo local |
 | Cuotas | Free: 50 contents / 20 images por mes (ver `/me`) |
 | Storage | `S3_*` → S3; si no, local |
-| Publish | LinkedIn OAuth + adapter; resto stub |
+| Publish | LinkedIn, Facebook, Instagram, X, WhatsApp Cloud API |
 
 ## Fase 1 — MVP (base)
 

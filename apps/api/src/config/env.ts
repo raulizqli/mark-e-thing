@@ -43,6 +43,19 @@ const envSchema = z.object({
     .string()
     .url()
     .default('http://localhost:3001/oauth/linkedin/callback'),
+  META_APP_ID: z.string().optional(),
+  META_APP_SECRET: z.string().optional(),
+  META_REDIRECT_URI: z
+    .string()
+    .url()
+    .default('http://localhost:3001/oauth/meta/callback'),
+  X_CLIENT_ID: z.string().optional(),
+  X_CLIENT_SECRET: z.string().optional(),
+  X_REDIRECT_URI: z
+    .string()
+    .url()
+    .default('http://localhost:3001/oauth/x/callback'),
+  WHATSAPP_GRAPH_VERSION: z.string().default('v21.0'),
   OAUTH_STATE_SECRET: z.string().default('markething-oauth-dev-secret'),
   FREE_MONTHLY_CONTENT_QUOTA: z.coerce.number().default(50),
   FREE_MONTHLY_IMAGE_QUOTA: z.coerce.number().default(20),
@@ -81,3 +94,7 @@ export const hasS3Storage =
   isUsableKey(env.S3_SECRET_ACCESS_KEY);
 export const hasLinkedInOAuth =
   isUsableKey(env.LINKEDIN_CLIENT_ID) && isUsableKey(env.LINKEDIN_CLIENT_SECRET);
+export const hasMetaOAuth =
+  isUsableKey(env.META_APP_ID) && isUsableKey(env.META_APP_SECRET);
+export const hasXOAuth =
+  isUsableKey(env.X_CLIENT_ID) && isUsableKey(env.X_CLIENT_SECRET);

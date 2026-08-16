@@ -40,6 +40,7 @@ import { EnqueuePublishUseCase } from './use-cases/publishing/enqueue-publish.us
 import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs.use-case';
 import { DisconnectSocialUseCase } from './use-cases/connections/disconnect-social.use-case';
 import { ListConnectionsUseCase } from './use-cases/connections/list-connections.use-case';
+import { ConnectWhatsAppUseCase } from './use-cases/connections/connect-whatsapp.use-case';
 import { QuotaService } from './services/quota.service';
 import { PrismaService } from '@infrastructure/prisma/prisma.service';
 
@@ -226,6 +227,12 @@ import { PrismaService } from '@infrastructure/prisma/prisma.service';
         new DisconnectSocialUseCase(companies, publish),
       inject: [COMPANY_REPOSITORY, PUBLISH_REPOSITORY],
     },
+    {
+      provide: ConnectWhatsAppUseCase,
+      useFactory: (companies, publish) =>
+        new ConnectWhatsAppUseCase(companies, publish),
+      inject: [COMPANY_REPOSITORY, PUBLISH_REPOSITORY],
+    },
   ],
   exports: [
     QuotaService,
@@ -255,6 +262,7 @@ import { PrismaService } from '@infrastructure/prisma/prisma.service';
     ListPublishJobsUseCase,
     ListConnectionsUseCase,
     DisconnectSocialUseCase,
+    ConnectWhatsAppUseCase,
   ],
 })
 export class ApplicationModule {}

@@ -7,9 +7,9 @@
 
 ## Límites
 
-- **Publicación:** LinkedIn es la primera red con OAuth + adapter real. Otras redes siguen stubbeadas.
+- **Publicación:** LinkedIn, Facebook Pages, Instagram Business, X (tweets) y WhatsApp Cloud API (mensaje a destinatario; no Status oficial).
 - **Cuotas free:** 50 contenidos y 20 imágenes / mes / usuario (configurable).
-- **Storage:** local por defecto; S3 si `S3_BUCKET` + credenciales están definidos.
+- **Storage:** local por defecto; S3 si `S3_BUCKET` + credenciales están definidos. Instagram/WhatsApp imagen necesitan URL pública.
 
 ## Flujo recomendado
 
@@ -18,8 +18,8 @@
 3. Sube documentos TXT/PDF en **Base de conocimiento**
 4. **Generar contenido** (+ imagen)
 5. **Programar** en el calendario
-6. En **Conexiones**, conecta LinkedIn (si hay client id/secret)
-7. Desde el detalle de contenido → **Publicar en LinkedIn**
+6. En **Conexiones**, conecta LinkedIn / Meta / X, o pega token de WhatsApp Cloud API
+7. Desde el detalle de contenido → **Publicar** en la red deseada
 8. Revisa **Historial** para duplicar / regenerar / restaurar
 
 ## Smoke local
@@ -37,5 +37,10 @@ Con `AUTH_MODE=dev`, el smoke no necesita JWT.
 | GET | `/me` |
 | GET | `/companies/:id/connections` |
 | GET | `/companies/:id/connections/linkedin/authorize` |
+| GET | `/companies/:id/connections/meta/authorize` |
+| GET | `/companies/:id/connections/x/authorize` |
+| POST | `/companies/:id/connections/whatsapp` |
 | DELETE | `/companies/:id/connections/:platform` |
 | GET | `/oauth/linkedin/callback` |
+| GET | `/oauth/meta/callback` |
+| GET | `/oauth/x/callback` |

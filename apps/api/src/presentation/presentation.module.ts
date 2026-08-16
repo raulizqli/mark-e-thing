@@ -10,6 +10,8 @@ import { HealthController } from './controllers/health.controller';
 import { ImagesController } from './controllers/images.controller';
 import { KnowledgeController } from './controllers/knowledge.controller';
 import { LinkedInOAuthController } from './controllers/linkedin-oauth.controller';
+import { MetaOAuthController } from './controllers/meta-oauth.controller';
+import { XOAuthController } from './controllers/x-oauth.controller';
 import { MeController } from './controllers/me.controller';
 import { PublishingController } from './controllers/publishing.controller';
 import { AuthMiddleware } from './middleware/auth.middleware';
@@ -29,6 +31,8 @@ import { UserSyncService } from './services/user-sync.service';
     PublishingController,
     ConnectionsController,
     LinkedInOAuthController,
+    MetaOAuthController,
+    XOAuthController,
   ],
   providers: [DevUserBootstrapService, UserSyncService, AuthMiddleware],
 })
@@ -36,7 +40,12 @@ export class PresentationModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer
       .apply(AuthMiddleware)
-      .exclude('health', 'oauth/linkedin/callback')
+      .exclude(
+        'health',
+        'oauth/linkedin/callback',
+        'oauth/meta/callback',
+        'oauth/x/callback',
+      )
       .forRoutes('*');
   }
 }

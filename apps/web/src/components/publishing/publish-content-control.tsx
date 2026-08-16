@@ -7,40 +7,65 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 
+type PublishPlatform = "LINKEDIN" | "FACEBOOK" | "INSTAGRAM" | "X" | "WHATSAPP";
+
+const LABELS: Record<PublishPlatform, string> = {
+  LINKEDIN: "LinkedIn",
+  FACEBOOK: "Facebook",
+  INSTAGRAM: "Instagram",
+  X: "X",
+  WHATSAPP: "WhatsApp",
+};
+
 interface PublishContentControlProps {
   companyId: string;
   contentId: string;
-  onPublished?: () => void;
+  platforms?: PublishPlatform[];
+  onPublished?: (platform: PublishPlatform) => void;
   onError?: (message: string) => void;
 }
 
 export function PublishContentControl({
   companyId,
   contentId,
+  platforms = ["LINKEDIN", "FACEBOOK", "INSTAGRAM", "X", "WHATSAPP"],
   onPublished,
   onError,
 }: PublishContentControlProps) {
-  const [busy, setBusy] = useState(false);
+  const [busyPlatform, setBusyPlatform] = useState<PublishPlatform | null>(null);
 
-  async function handlePublish() {
-    setBusy(true);
+  async function handlePublish(platform: PublishPlatform) {
+    setBusyPlatform(platform);
     try {
       await api.post(`/companies/${companyId}/publish`, {
         contentId,
-        platform: "LINKEDIN",
+        platform,
       });
-      onPublished?.();
+      onPublished?.(platform);
     } catch (err) {
       onError?.(err instanceof Error ? err.message : "Error al publicar");
     } finally {
-      setBusy(false);
+      setBusyPlatform(null);
     }
   }
 
   return (
-    <Button type="button" variant="outline" size="sm" disabled={busy} onClick={handlePublish}>
-      <Send className="h-4 w-4" />
-      {busy ? "Publicando…" : "Publicar en LinkedIn"}
-    </Button>
+    <div className="flex flex-wrap gap-2">
+      {platforms.map((platform) => (
+        <Button
+          key={platform}
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={busyPlatform !== null}
+          onClick={() => handlePublish(platform)}
+        >
+          <Send className="h-4 w-4" />
+          {busyPlatform === platform
+            ? `Publicando en ${LABELS[platform]}…`
+            : `Publicar en ${LABELS[platform]}`}
+        </Button>
+      ))}
+    </div>
   );
 }

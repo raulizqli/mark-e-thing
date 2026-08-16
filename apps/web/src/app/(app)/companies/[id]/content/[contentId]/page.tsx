@@ -120,8 +120,8 @@ export default function ContentDetailPage() {
             <PublishContentControl
               companyId={params.id}
               contentId={content.id}
-              onPublished={() =>
-                setScheduleNotice("Publicación a LinkedIn encolada / enviada.")
+              onPublished={(platform) =>
+                setScheduleNotice(`Publicación a ${platform} encolada / enviada.`)
               }
               onError={setError}
             />
