@@ -1,6 +1,9 @@
+// apps/web/src/components/content/content-card.tsx
+
 import Link from "next/link";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { ScheduleContentControl } from "@/components/calendar/schedule-content-control";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CONTENT_STATUS_LABELS, CONTENT_TYPE_LABELS } from "@/lib/content-types";
@@ -12,6 +15,9 @@ interface ContentCardProps {
   companyId: string;
   onDuplicate?: (id: string) => void;
   onRegenerate?: (id: string) => void;
+  onScheduled?: () => void;
+  onScheduleError?: (message: string) => void;
+  showSchedule?: boolean;
   actions?: React.ReactNode;
   className?: string;
 }
@@ -21,6 +27,9 @@ export function ContentCard({
   companyId,
   onDuplicate,
   onRegenerate,
+  onScheduled,
+  onScheduleError,
+  showSchedule = true,
   actions,
   className,
 }: ContentCardProps) {
@@ -72,6 +81,14 @@ export function ContentCard({
           <Button variant="ghost" size="sm" onClick={() => onRegenerate(content.id)}>
             Regenerar
           </Button>
+        )}
+        {showSchedule && (
+          <ScheduleContentControl
+            companyId={companyId}
+            contentId={content.id}
+            onScheduled={onScheduled}
+            onError={onScheduleError}
+          />
         )}
         {actions}
       </div>

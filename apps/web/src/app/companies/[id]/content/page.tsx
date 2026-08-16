@@ -1,3 +1,5 @@
+// apps/web/src/app/companies/[id]/content/page.tsx
+
 "use client";
 
 import { useParams } from "next/navigation";
@@ -13,6 +15,7 @@ export default function ContentHistoryPage() {
   const [contents, setContents] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [scheduleNotice, setScheduleNotice] = useState<string | null>(null);
 
   async function loadData() {
     const [companyData, contentList] = await Promise.all([
@@ -63,6 +66,12 @@ export default function ContentHistoryPage() {
           </div>
         )}
 
+        {scheduleNotice && (
+          <div className="rounded-xl border border-teal/30 bg-teal/5 px-4 py-3 text-sm text-teal">
+            {scheduleNotice}
+          </div>
+        )}
+
         {loading ? (
           <p className="text-muted">Cargando contenido…</p>
         ) : contents.length === 0 ? (
@@ -78,6 +87,11 @@ export default function ContentHistoryPage() {
                 companyId={params.id}
                 onDuplicate={handleDuplicate}
                 onRegenerate={handleRegenerate}
+                onScheduled={async () => {
+                  setScheduleNotice("Contenido programado en el calendario.");
+                  await loadData();
+                }}
+                onScheduleError={setError}
               />
             ))}
           </div>

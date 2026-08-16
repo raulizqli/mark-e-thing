@@ -1,14 +1,31 @@
 # MarkeThing — Guía de uso (Fase 1)
 
+## Límites del MVP
+
+- **Auth:** usuario de desarrollo (`DEV_USER_*`). No hay login real.
+- **Publicación:** `POST /companies/:id/publish` encola jobs, pero los adapters están stubbeados (`PLATFORM_NOT_CONFIGURED`). No se publica en redes.
+- **Knowledge:** extracción de texto soportada para **TXT y PDF**. Otros formatos se guardan con marcador de extracción pendiente.
+
 ## Flujo recomendado
 
 1. Abre http://localhost:3000 → **Empezar**
 2. Crea una **empresa** y completa el perfil de marca
-3. Sube documentos en **Base de conocimiento**
+3. Sube documentos TXT/PDF en **Base de conocimiento**
 4. Ve a **Generar contenido**, elige formatos y genera
 5. Genera imagen a partir del prompt
-6. Programa en el **Calendario** (arrastra para reprogramar)
-7. Revisa **Historial** para duplicar / regenerar / restaurar versiones
+6. Pulsa **Programar** en el resultado (o desde Historial / detalle) para crear la entrada en el **Calendario**
+7. En el calendario: arrastra para reprogramar, o abre una entrada para **duplicar** / **eliminar**
+8. Revisa **Historial** para duplicar / regenerar / restaurar versiones
+
+## Smoke local
+
+Con la API en marcha (`npm run dev:api`) y `DATABASE_URL` configurada:
+
+```bash
+npm run smoke
+```
+
+El script recorre health → empresa → knowledge TXT → generate → schedule → calendar list → delete entry.
 
 ## API (resumen)
 
@@ -32,6 +49,7 @@ Todas las respuestas exitosas: `{ "success": true, "data": ... }`
 | GET | `/companies/:id/calendar?month=YYYY-MM` |
 | POST | `/companies/:id/calendar` body `{ contentId, scheduledAt }` |
 | PATCH/DELETE | `/companies/:id/calendar/:entryId` |
+| POST | `/companies/:id/calendar/:entryId/duplicate` |
 | POST | `/companies/:id/publish` |
 | GET | `/companies/:id/publish/jobs` |
 

@@ -1,8 +1,10 @@
+// apps/web/src/app/companies/[id]/knowledge/page.tsx
+
 "use client";
 
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Upload } from "lucide-react";
+import { Trash2, Upload } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { AppShell } from "@/components/layout/app-shell";
@@ -22,6 +24,7 @@ export default function KnowledgePage() {
   const [documents, setDocuments] = useState<KnowledgeDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [type, setType] = useState<KnowledgeType>("OTHER");
@@ -67,13 +70,27 @@ export default function KnowledgePage() {
     }
   }
 
+  async function handleDelete(docId: string) {
+    setDeletingId(docId);
+    setError(null);
+    try {
+      await api.delete(`/companies/${params.id}/knowledge/${docId}`);
+      await loadData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al eliminar documento");
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   return (
     <AppShell companyId={params.id} companyName={company?.name}>
       <div className="space-y-8">
         <div>
           <h1 className="font-display text-3xl text-ink">Base de conocimiento</h1>
           <p className="mt-2 text-muted">
-            Sube documentos para que la IA entienda mejor tu negocio.
+            Sube TXT o PDF para que la IA use el contexto de tu negocio. Otros formatos se
+            almacenan, pero la extracción de texto puede quedar pendiente.
           </p>
         </div>
 
@@ -95,8 +112,14 @@ export default function KnowledgePage() {
               </Select>
             </div>
             <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="file">Archivo</Label>
-              <Input id="file" ref={fileRef} type="file" required />
+              <Label htmlFor="file">Archivo (TXT o PDF recomendado)</Label>
+              <Input
+                id="file"
+                ref={fileRef}
+                type="file"
+                accept=".txt,.pdf,text/plain,application/pdf"
+                required
+              />
             </div>
           </div>
           <Button type="submit" disabled={uploading}>
@@ -120,16 +143,35 @@ export default function KnowledgePage() {
         ) : (
           <ul className="space-y-3">
             {documents.map((doc) => (
-              <li key={doc.id} className="glass-panel flex flex-wrap items-center justify-between gap-3 p-4">
+              <li
+                key={doc.id}
+                className="glass-panel flex flex-wrap items-center justify-between gap-3 p-4"
+              >
                 <div>
                   <h3 className="font-medium text-ink">{doc.title}</h3>
                   <p className="text-sm text-muted">{doc.fileName}</p>
+                  {doc.extractedText?.startsWith("[Pending") && (
+                    <p className="mt-1 text-xs text-muted">
+                      Extracción pendiente para este formato
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-3">
                   <Badge variant="teal">{KNOWLEDGE_TYPE_LABELS[doc.type]}</Badge>
                   <time className="text-xs text-muted">
                     {format(new Date(doc.createdAt), "d MMM yyyy", { locale: es })}
                   </time>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    disabled={deletingId === doc.id}
+                    onClick={() => handleDelete(doc.id)}
+                    aria-label={`Eliminar ${doc.title}`}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    {deletingId === doc.id ? "Eliminando…" : "Eliminar"}
+                  </Button>
                 </div>
               </li>
             ))}

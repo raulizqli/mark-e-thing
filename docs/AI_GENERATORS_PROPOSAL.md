@@ -1,8 +1,8 @@
 # Proposal: Free & Low-Cost AI Generators for MarkeThing
 
-**Status:** Recommendation for Fase 1+  
+**Status:** Implemented for Fase 1 (factory + Gemini/Groq/Together/OpenAI/mock)  
 **Audience:** Product / engineering  
-**Context:** MarkeThing Fase 1 currently wires `ContentGeneratorPort` and `ImageGeneratorPort` to OpenAI (`gpt-4o-mini` + `dall-e-3`) with mock fallbacks. OpenAI is fine as a paid path; it is not optimal as the default for MVP cost control.
+**Context:** MarkeThing Fase 1 wires `ContentGeneratorPort` and `ImageGeneratorPort` through `ai.factory.ts`. Prefer Gemini/Together for demo cost control; keep OpenAI as premium and mock for offline/CI.
 
 This document proposes free and low-cost AI providers for **text/content** and **image** generation, mapped to the existing ports so adapters can be swapped without changing use cases.
 
@@ -32,8 +32,9 @@ GenerateImageUseCase    →  ImageGeneratorPort    →  [GeminiImage | Together/
 
 Today (`ai.factory.ts`):
 
-- Content → `OpenAiContentGenerator` | `MockContentGenerator`
-- Image → `OpenAiImageGenerator` | `MockImageGenerator`
+- Content → `GeminiContentGenerator` | `GroqContentGenerator` | `OpenAiContentGenerator` | `MockContentGenerator`
+- Image → `GeminiImageGenerator` | `TogetherImageGenerator` | `OpenAiImageGenerator` | `MockImageGenerator`
+- Selection via `AI_CONTENT_PROVIDER` / `AI_IMAGE_PROVIDER` (`auto` picks first available key)
 
 Recommended env shape (additive, not a rewrite):
 
