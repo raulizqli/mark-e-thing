@@ -7,12 +7,14 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 
-type PublishPlatform = "LINKEDIN" | "FACEBOOK" | "INSTAGRAM";
+type PublishPlatform = "LINKEDIN" | "FACEBOOK" | "INSTAGRAM" | "X" | "WHATSAPP";
 
 const LABELS: Record<PublishPlatform, string> = {
   LINKEDIN: "LinkedIn",
   FACEBOOK: "Facebook",
   INSTAGRAM: "Instagram",
+  X: "X",
+  WHATSAPP: "WhatsApp",
 };
 
 interface PublishContentControlProps {
@@ -26,7 +28,7 @@ interface PublishContentControlProps {
 export function PublishContentControl({
   companyId,
   contentId,
-  platforms = ["LINKEDIN", "FACEBOOK", "INSTAGRAM"],
+  platforms = ["LINKEDIN", "FACEBOOK", "INSTAGRAM", "X", "WHATSAPP"],
   onPublished,
   onError,
 }: PublishContentControlProps) {

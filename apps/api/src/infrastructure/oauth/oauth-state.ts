@@ -9,6 +9,7 @@ export interface OAuthStatePayload {
   userId: string;
   provider: string;
   exp: number;
+  codeVerifier?: string;
 }
 
 export function signOAuthState(payload: OAuthStatePayload): string {

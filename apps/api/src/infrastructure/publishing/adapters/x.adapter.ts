@@ -10,16 +10,49 @@ import { AppError } from '@shared/errors/app-error';
 export class XAdapter implements PublishAdapter {
   readonly platform = 'X' as const;
 
-  canPublish(_connection: SocialConnection | null): boolean {
-    return false;
+  canPublish(connection: SocialConnection | null): boolean {
+    return Boolean(connection?.accessToken);
   }
 
-  async publish(_content: Content, _connection: SocialConnection): Promise<PublishResult> {
-    console.log('[XAdapter] not connected');
-    throw new AppError(
-      400,
-      'PLATFORM_NOT_CONFIGURED',
-      'Platform adapter not configured — connect credentials in Phase 1+',
-    );
+  async publish(content: Content, connection: SocialConnection): Promise<PublishResult> {
+    if (!connection.accessToken) {
+      throw new AppError(400, 'PLATFORM_NOT_CONFIGURED', 'X connection is missing access token');
+    }
+
+    const text = [content.title, content.copy, content.cta, content.hashtags.map((h) => `#${h}`).join(' ')]
+      .filter(Boolean)
+      .join('\n\n')
+      .slice(0, 280);
+
+    const response = await fetch('https://api.twitter.com/2/tweets', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${connection.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text }),
+    });
+
+    const json = (await response.json()) as {
+      data?: { id?: string };
+      detail?: string;
+      title?: string;
+      errors?: Array<{ message?: string }>;
+    };
+
+    if (!response.ok || !json.data?.id) {
+      const message =
+        json.detail ??
+        json.title ??
+        json.errors?.[0]?.message ??
+        `X publish failed (${response.status})`;
+      throw new AppError(502, 'X_PUBLISH_FAILED', message);
+    }
+
+    return {
+      externalId: json.data.id,
+      publishedAt: new Date(),
+      payload: { platform: 'X', textLength: text.length },
+    };
   }
 }
