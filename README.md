@@ -4,7 +4,7 @@ SaaS de Marketing con Inteligencia Artificial. Evoluciona desde un generador de 
 
 ## Fase 1.5 — Productización (actual)
 
-Autenticación real con **Supabase Auth**, cuotas de generación, storage S3 opcional y **LinkedIn** como primera red con OAuth + publicación real.
+Autenticación real con **Supabase Auth**, cuotas de generación, storage S3 opcional y publicación real en redes sociales.
 
 | Pieza | Detalle |
 |---|---|
@@ -19,14 +19,14 @@ Configura la marca, genera contenido e imágenes con IA y organiza el calendario
 
 ### Capacidades
 
-| Módulo | Qué hace | Estado Fase 1 |
+| Módulo | Qué hace | Estado |
 |---|---|---|
 | Empresas | Perfil de marca: giro, servicios, productos, colores, tono, CTAs, palabras prohibidas, redes | Listo |
 | Base de conocimiento | Sube TXT/PDF (extracción de texto). Word/imágenes se almacenan; extracción puede quedar pendiente | Parcial |
 | Generación de contenido | Facebook, Instagram (post/carousel/story), Stories, WhatsApp Status, LinkedIn, X, Blog, Email, Promociones | Listo |
 | Imágenes | Prompt + generación (Gemini / Together / OpenAI / mock) | Listo |
 | Calendario | Vista mensual, programar desde generar/historial, arrastrar, duplicar, eliminar | Listo |
-| Publicación | LinkedIn real (OAuth); resto stub | Fase 1.5 |
+| Publicación | LinkedIn, Facebook, Instagram, X, WhatsApp Cloud API | Fase 1.5 |
 | Historial | Versiones con duplicar, regenerar y restaurar | Listo |
 | Auth | Supabase Auth (`AUTH_MODE=supabase`) o demo (`dev`) | Fase 1.5 |
 
@@ -86,9 +86,9 @@ Auth: `AUTH_MODE=dev` (demo) o `supabase` (JWT). Ver `.env.example`.
 
 ## Arquitectura de publicación
 
-Cada red social tiene un adaptador (`FacebookAdapter`, `InstagramAdapter`, …) detrás de `PublishAdapterRegistry`. En Fase 1 los adaptadores están **stubbeados a propósito**: `canPublish()` es false y la cola `PublishJob` queda en `PENDING`. No hay OAuth ni UI de publicación todavía.
+Cada red social tiene un adaptador (`FacebookAdapter`, `InstagramAdapter`, …) detrás de `PublishAdapterRegistry`. En Fase 1.5 los adapters de LinkedIn, Facebook, Instagram, X y WhatsApp Cloud API están implementados; requieren OAuth/tokens configurados.
 
-WhatsApp Status: la API oficial de WhatsApp Business Platform no cubre Estados de la misma forma que posts; la publicación automática se evalúa aparte.
+WhatsApp Status: la API oficial no cubre Estados como posts; MarkeThing mapea ese tipo a un mensaje Cloud API hacia un destinatario configurado.
 
 ## Proveedores de IA
 
