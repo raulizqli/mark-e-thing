@@ -7,6 +7,7 @@ import type { ImageRepository } from '../../../domain/repositories/image.reposit
 import type { ImageGeneratorPort } from '../../../domain/services/image-generator.port';
 import type { StoragePort } from '../../../domain/services/storage.port';
 import type { GeneratedImage } from '../../../domain/entities/generated-image.entity';
+import type { QuotaService } from '../../services/quota.service';
 import { AppError } from '../../../shared/errors/app-error';
 
 export interface GenerateImageInput {
@@ -22,6 +23,7 @@ export class GenerateImageUseCase {
     private readonly imageRepository: ImageRepository,
     private readonly imageGenerator: ImageGeneratorPort,
     private readonly storage: StoragePort,
+    private readonly quotaService?: QuotaService,
   ) {}
 
   async execute(
@@ -34,6 +36,10 @@ export class GenerateImageUseCase {
     );
     if (!company) {
       throw AppError.notFound('Company', input.companyId);
+    }
+
+    if (this.quotaService) {
+      await this.quotaService.assertAndConsume(userId, 'image');
     }
 
     if (input.contentId) {

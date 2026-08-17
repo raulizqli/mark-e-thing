@@ -17,7 +17,7 @@ import { DuplicateCalendarEntryUseCase } from '@application/use-cases/calendar/d
 import { ListCalendarUseCase } from '@application/use-cases/calendar/list-calendar.use-case';
 import { RescheduleContentUseCase } from '@application/use-cases/calendar/reschedule-content.use-case';
 import { ScheduleContentUseCase } from '@application/use-cases/calendar/schedule-content.use-case';
-import type { RequestWithUser } from '../middleware/dev-user.middleware';
+import type { RequestWithUser } from '../middleware/auth.middleware';
 
 @Controller('companies/:companyId/calendar')
 export class CalendarController {

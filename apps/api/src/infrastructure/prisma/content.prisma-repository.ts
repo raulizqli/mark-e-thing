@@ -48,7 +48,10 @@ export class ContentPrismaRepository implements ContentRepository {
   }
 
   async findByIdForCompany(id: string, companyId: string): Promise<Content | null> {
-    const row = await this.prisma.content.findFirst({ where: { id, companyId } });
+    const row = await this.prisma.content.findFirst({
+      where: { id, companyId },
+      include: { image: true },
+    });
     return row ? this.mapContent(row) : null;
   }
 
@@ -130,10 +133,28 @@ export class ContentPrismaRepository implements ContentRepository {
     metadata: Prisma.JsonValue | null;
     createdAt: Date;
     updatedAt: Date;
+    image?: { id: string; url: string | null } | null;
   }): Content {
     return {
-      ...row,
+      id: row.id,
+      companyId: row.companyId,
+      type: row.type,
+      status: row.status,
+      title: row.title,
+      copy: row.copy,
+      cta: row.cta,
+      emojis: row.emojis,
+      hashtags: row.hashtags,
+      imagePrompt: row.imagePrompt,
+      seoKeywords: row.seoKeywords,
+      currentVersion: row.currentVersion,
+      scheduledAt: row.scheduledAt,
+      publishedAt: row.publishedAt,
+      imageId: row.imageId,
+      image: row.image ? { id: row.image.id, url: row.image.url } : null,
       metadata: row.metadata as Record<string, unknown> | null,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     };
   }
 

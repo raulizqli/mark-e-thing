@@ -38,10 +38,20 @@ import { ListKnowledgeUseCase } from './use-cases/knowledge/list-knowledge.use-c
 import { UploadKnowledgeUseCase } from './use-cases/knowledge/upload-knowledge.use-case';
 import { EnqueuePublishUseCase } from './use-cases/publishing/enqueue-publish.use-case';
 import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs.use-case';
+import { DisconnectSocialUseCase } from './use-cases/connections/disconnect-social.use-case';
+import { ListConnectionsUseCase } from './use-cases/connections/list-connections.use-case';
+import { ConnectWhatsAppUseCase } from './use-cases/connections/connect-whatsapp.use-case';
+import { QuotaService } from './services/quota.service';
+import { PrismaService } from '@infrastructure/prisma/prisma.service';
 
 @Module({
   imports: [InfrastructureModule],
   providers: [
+    {
+      provide: QuotaService,
+      useFactory: (prisma: PrismaService) => new QuotaService(prisma),
+      inject: [PrismaService],
+    },
     {
       provide: ListCompaniesUseCase,
       useFactory: (repo) => new ListCompaniesUseCase(repo),
@@ -87,13 +97,14 @@ import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs
     },
     {
       provide: GenerateContentUseCase,
-      useFactory: (companies, knowledge, contents, generator) =>
-        new GenerateContentUseCase(companies, knowledge, contents, generator),
+      useFactory: (companies, knowledge, contents, generator, quota) =>
+        new GenerateContentUseCase(companies, knowledge, contents, generator, quota),
       inject: [
         COMPANY_REPOSITORY,
         KNOWLEDGE_REPOSITORY,
         CONTENT_REPOSITORY,
         CONTENT_GENERATOR,
+        QuotaService,
       ],
     },
     {
@@ -122,13 +133,14 @@ import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs
     },
     {
       provide: RegenerateContentUseCase,
-      useFactory: (companies, knowledge, contents, generator) =>
-        new RegenerateContentUseCase(companies, knowledge, contents, generator),
+      useFactory: (companies, knowledge, contents, generator, quota) =>
+        new RegenerateContentUseCase(companies, knowledge, contents, generator, quota),
       inject: [
         COMPANY_REPOSITORY,
         KNOWLEDGE_REPOSITORY,
         CONTENT_REPOSITORY,
         CONTENT_GENERATOR,
+        QuotaService,
       ],
     },
     {
@@ -145,14 +157,15 @@ import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs
     },
     {
       provide: GenerateImageUseCase,
-      useFactory: (companies, contents, images, generator, storage) =>
-        new GenerateImageUseCase(companies, contents, images, generator, storage),
+      useFactory: (companies, contents, images, generator, storage, quota) =>
+        new GenerateImageUseCase(companies, contents, images, generator, storage, quota),
       inject: [
         COMPANY_REPOSITORY,
         CONTENT_REPOSITORY,
         IMAGE_REPOSITORY,
         IMAGE_GENERATOR,
         STORAGE_SERVICE,
+        QuotaService,
       ],
     },
     {
@@ -202,8 +215,27 @@ import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs
         new ListPublishJobsUseCase(companies, publish),
       inject: [COMPANY_REPOSITORY, PUBLISH_REPOSITORY],
     },
+    {
+      provide: ListConnectionsUseCase,
+      useFactory: (companies, publish) =>
+        new ListConnectionsUseCase(companies, publish),
+      inject: [COMPANY_REPOSITORY, PUBLISH_REPOSITORY],
+    },
+    {
+      provide: DisconnectSocialUseCase,
+      useFactory: (companies, publish) =>
+        new DisconnectSocialUseCase(companies, publish),
+      inject: [COMPANY_REPOSITORY, PUBLISH_REPOSITORY],
+    },
+    {
+      provide: ConnectWhatsAppUseCase,
+      useFactory: (companies, publish) =>
+        new ConnectWhatsAppUseCase(companies, publish),
+      inject: [COMPANY_REPOSITORY, PUBLISH_REPOSITORY],
+    },
   ],
   exports: [
+    QuotaService,
     ListCompaniesUseCase,
     CreateCompanyUseCase,
     GetCompanyUseCase,
@@ -228,6 +260,9 @@ import { ListPublishJobsUseCase } from './use-cases/publishing/list-publish-jobs
     DuplicateCalendarEntryUseCase,
     EnqueuePublishUseCase,
     ListPublishJobsUseCase,
+    ListConnectionsUseCase,
+    DisconnectSocialUseCase,
+    ConnectWhatsAppUseCase,
   ],
 })
 export class ApplicationModule {}

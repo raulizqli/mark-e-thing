@@ -61,14 +61,34 @@ enum PublishJobStatus {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  name      String?
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  companies Company[]
+  id                  String            @id @default(uuid())
+  email               String            @unique
+  name                String?
+  plan                String            @default("free")
+  monthlyContentQuota Int               @default(50) @map("monthly_content_quota")
+  monthlyImageQuota   Int               @default(20) @map("monthly_image_quota")
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updatedAt           DateTime          @updatedAt @map("updated_at")
+  companies           Company[]
+  generationUsages    GenerationUsage[]
 
   @@map("users")
+}
+
+model GenerationUsage {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  kind      String
+  yearMonth String   @map("year_month")
+  count     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind, yearMonth])
+  @@index([userId])
+  @@map("generation_usages")
 }
 
 model Company {

@@ -1,6 +1,14 @@
+// apps/web/src/lib/api.ts
+
 import type { ApiError } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+
+let accessTokenProvider: (() => string | null) | null = null;
+
+export function setAccessTokenProvider(provider: () => string | null): void {
+  accessTokenProvider = provider;
+}
 
 export class ApiClientError extends Error {
   status: number;
@@ -36,6 +44,7 @@ function unwrap<T>(payload: unknown): T {
 
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, headers, ...rest } = options;
+  const token = accessTokenProvider?.() ?? null;
 
   const response = await fetch(`${API_URL}${path}`, {
     ...rest,
@@ -43,6 +52,7 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
       ...(body !== undefined && !(body instanceof FormData)
         ? { "Content-Type": "application/json" }
         : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     body:
@@ -93,3 +103,4 @@ export const api = {
 };
 
 export { API_URL };
+export type { ApiError };

@@ -13,7 +13,7 @@ export default function LandingPage() {
       <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <Logo size="md" />
         <Link
-          href="/dashboard"
+          href="/login"
           className="text-sm font-medium text-muted transition-colors hover:text-ink"
         >
           Iniciar sesión
@@ -36,18 +36,18 @@ export default function LandingPage() {
 
           <div className="animate-initial-hidden animate-fade-up-delay-2 mt-10 flex flex-wrap gap-4">
             <Link
-              href="/dashboard"
+              href="/signup"
               className="cta-hover inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal px-6 text-base font-medium text-white shadow-sm transition-colors hover:bg-teal-light"
             >
               Comenzar gratis
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/companies"
+              href="/login"
               className="cta-hover inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-teal px-6 text-base font-medium text-teal transition-colors hover:bg-teal/5"
             >
               <Sparkles className="h-4 w-4" />
-              Ver empresas
+              Entrar
             </Link>
           </div>
         </div>

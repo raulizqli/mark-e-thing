@@ -1,31 +1,35 @@
-# MarkeThing — Guía de uso (Fase 1)
+# MarkeThing — Guía de uso (Fase 1.5)
 
-## Límites del MVP
+## Auth
 
-- **Auth:** usuario de desarrollo (`DEV_USER_*`). No hay login real.
-- **Publicación:** `POST /companies/:id/publish` encola jobs, pero los adapters están stubbeados (`PLATFORM_NOT_CONFIGURED`). No se publica en redes.
+- **Local / demos:** `AUTH_MODE=dev` + `NEXT_PUBLIC_AUTH_MODE=dev` (usuario `DEV_USER_*`).
+- **Beta:** `AUTH_MODE=supabase` + keys `NEXT_PUBLIC_SUPABASE_*` + `SUPABASE_JWT_SECRET`. Login en `/login`, alta en `/signup`.
+
+## Límites
+
+- **Publicación:** LinkedIn, Facebook Pages, Instagram Business, X (tweets) y WhatsApp Cloud API (mensaje a destinatario; no Status oficial).
+- **Cuotas free:** 50 contenidos y 20 imágenes / mes / usuario (configurable).
+- **Storage:** local por defecto; S3 si `S3_BUCKET` + credenciales están definidos. Instagram/WhatsApp imagen necesitan URL pública.
 - **Knowledge:** extracción de texto soportada para **TXT y PDF**. Otros formatos se guardan con marcador de extracción pendiente.
 
 ## Flujo recomendado
 
-1. Abre http://localhost:3000 → **Empezar**
+1. Abre http://localhost:3000 → **Comenzar gratis** / **Entrar**
 2. Crea una **empresa** y completa el perfil de marca
 3. Sube documentos TXT/PDF en **Base de conocimiento**
-4. Ve a **Generar contenido**, elige formatos y genera
-5. Genera imagen a partir del prompt
-6. Pulsa **Programar** en el resultado (o desde Historial / detalle) para crear la entrada en el **Calendario**
-7. En el calendario: arrastra para reprogramar, o abre una entrada para **duplicar** / **eliminar**
-8. Revisa **Historial** para duplicar / regenerar / restaurar versiones
+4. **Generar contenido** (+ imagen)
+5. **Programar** en el calendario (arrastra para reprogramar; duplicar / eliminar desde el panel)
+6. En **Conexiones**, conecta LinkedIn / Meta / X, o pega token de WhatsApp Cloud API
+7. Desde el detalle de contenido → **Publicar** en la red deseada
+8. Revisa **Historial** para duplicar / regenerar / restaurar
 
 ## Smoke local
-
-Con la API en marcha (`npm run dev:api`) y `DATABASE_URL` configurada:
 
 ```bash
 npm run smoke
 ```
 
-El script recorre health → empresa → knowledge TXT → generate → schedule → calendar list → delete entry.
+Con `AUTH_MODE=dev`, el smoke no necesita JWT. Recorre health → empresa → `/me` → knowledge TXT → generate → schedule → calendar → cleanup.
 
 ## API (resumen)
 
@@ -34,6 +38,7 @@ Todas las respuestas exitosas: `{ "success": true, "data": ... }`
 | Método | Ruta |
 |---|---|
 | GET | `/health` |
+| GET | `/me` |
 | GET/POST | `/companies` |
 | GET/PATCH/DELETE | `/companies/:id` |
 | GET/POST | `/companies/:id/knowledge` |
@@ -50,6 +55,15 @@ Todas las respuestas exitosas: `{ "success": true, "data": ... }`
 | POST | `/companies/:id/calendar` body `{ contentId, scheduledAt }` |
 | PATCH/DELETE | `/companies/:id/calendar/:entryId` |
 | POST | `/companies/:id/calendar/:entryId/duplicate` |
+| GET | `/companies/:id/connections` |
+| GET | `/companies/:id/connections/linkedin/authorize` |
+| GET | `/companies/:id/connections/meta/authorize` |
+| GET | `/companies/:id/connections/x/authorize` |
+| POST | `/companies/:id/connections/whatsapp` |
+| DELETE | `/companies/:id/connections/:platform` |
+| GET | `/oauth/linkedin/callback` |
+| GET | `/oauth/meta/callback` |
+| GET | `/oauth/x/callback` |
 | POST | `/companies/:id/publish` |
 | GET | `/companies/:id/publish/jobs` |
 

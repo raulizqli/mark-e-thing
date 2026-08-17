@@ -6,6 +6,7 @@ import type { ContentRepository } from '../../../domain/repositories/content.rep
 import type { ContentGeneratorPort } from '../../../domain/services/content-generator.port';
 import type { Content } from '../../../domain/entities/content.entity';
 import type { RegenerateContentInput } from '../../dto/content.dto';
+import type { QuotaService } from '../../services/quota.service';
 import { AppError } from '../../../shared/errors/app-error';
 
 export class RegenerateContentUseCase {
@@ -14,6 +15,7 @@ export class RegenerateContentUseCase {
     private readonly knowledgeRepository: KnowledgeRepository,
     private readonly contentRepository: ContentRepository,
     private readonly contentGenerator: ContentGeneratorPort,
+    private readonly quotaService?: QuotaService,
   ) {}
 
   async execute(
@@ -28,6 +30,10 @@ export class RegenerateContentUseCase {
     );
     if (!company) {
       throw AppError.notFound('Company', companyId);
+    }
+
+    if (this.quotaService) {
+      await this.quotaService.assertAndConsume(userId, 'content');
     }
 
     const existing = await this.contentRepository.findByIdForCompany(
